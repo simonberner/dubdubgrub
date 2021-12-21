@@ -9,7 +9,17 @@ import SwiftUI
 
 struct LocationListView: View {
     var body: some View {
-        Text("LocationList")
+        NavigationView {
+            List {
+                ForEach(0..<10) { item in
+                    NavigationLink(destination: Text("Location Detail View")) {
+                        LocationListCell()
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .navigationTitle("Grub Spots")
+        }
     }
 }
 
