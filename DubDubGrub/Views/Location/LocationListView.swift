@@ -12,7 +12,7 @@ struct LocationListView: View {
         NavigationView {
             List {
                 ForEach(0..<10) { item in
-                    NavigationLink(destination: Text("Location Detail View")) {
+                    NavigationLink(destination: LocationDetailView()) {
                         LocationListCell()
                     }
                 }
