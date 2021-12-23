@@ -139,7 +139,6 @@
 		15FB051B27708FF70036A003 /* DubDubGrub */ = {
 			isa = PBXGroup;
 			children = (
-				15175F142771CD1800CD6A30 /* Cells */,
 				15FB054F2770D67D0036A003 /* Views */,
 				15FB054C2770A8040036A003 /* Extensions */,
 				15FB0546277093760036A003 /* DubDubGrub.entitlements */,
@@ -194,6 +193,7 @@
 		15FB054F2770D67D0036A003 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				15175F142771CD1800CD6A30 /* Cells */,
 				15175F1C277277CB00CD6A30 /* Utilities */,
 				15175F1B277277A700CD6A30 /* Location */,
 				15FB054D2770D6710036A003 /* AppTabView.swift */,
