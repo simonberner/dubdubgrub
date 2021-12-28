@@ -51,23 +51,57 @@ struct ProfileView: View {
             .cornerRadius(12)
             .padding(.horizontal)
 
-            HStack {
-                Text("Bio: 95 characters remaining")
-                    .fontWeight(.light)
-                Button {
+            VStack(alignment: .leading, spacing: 8) {
+                
+                HStack {
+                    Text("Bio: ")
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                    +
+                    Text("\(100 - bio.count)")
+                        .bold()
+                        .font(.callout)
+                        .foregroundColor(bio.count <= 100 ? .brandPrimary : Color(.systemPink))
+                    +
+                    Text(" characters remaining")
+                        .font(.callout)
+                        .foregroundColor(.secondary)
 
-                } label: {
-                    Label("Check Out", systemImage: "mappin.and.ellipse")
+                    Spacer()
+
+                    Button {
+
+                    } label: {
+                        Label("Check Out", systemImage: "mappin.and.ellipse")
+                            .font(.callout)
+                            .frame(width: 125, height: 30)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+
                 }
-                .accessibilityIdentifier("CheckOut")
-            }
 
-            TextField("Description", text: .constant("test"))
-                .padding()
-                .frame(height: 200)
+                TextEditor(text: $bio)
+                    .frame(height: 100)
+                    .overlay(RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.secondary, lineWidth: 1))
+            }
+            .padding(.horizontal)
+
 
             Spacer()
 
+            Button {
+
+            } label: {
+                Text("Create Profile")
+                    .bold()
+                    .frame(width: 280, height: 44)
+                    .background(Color.brandPrimary)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
 
         }
         .navigationTitle("Profile")
