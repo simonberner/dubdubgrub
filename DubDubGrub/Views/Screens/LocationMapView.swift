@@ -17,19 +17,22 @@ struct LocationMapView: View {
                                                                           longitudeDelta: 0.01))
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region)
-                .ignoresSafeArea(edges: .top)
+            Map(coordinateRegion: $region).ignoresSafeArea(edges: .top)
 
             VStack {
-                Image("ddg-map-logo")
-                    .resizable()
-                    .scaledToFit()
-                .frame(height: 70)
-                .shadow(radius: 10)
-
+                LogoView().shadow(radius: 10)
                 Spacer()
             }
         }
+    }
+}
+
+struct LogoView: View {
+    var body: some View {
+        Image("ddg-map-logo")
+            .resizable()
+            .scaledToFit()
+            .frame(height: 70)
     }
 }
 
