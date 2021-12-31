@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct LocationListCell: View {
+
+    var location: DDGLocation
+
     var body: some View {
         HStack {
             Image("default-square-asset")
@@ -18,7 +21,7 @@ struct LocationListCell: View {
                 .padding(.vertical, 8)
 
             VStack(alignment: .leading) {
-                Text("Restaurant name")
+                Text(location.name)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .lineLimit(1)
@@ -37,6 +40,6 @@ struct LocationListCell: View {
 
 struct LocationListCell_Previews: PreviewProvider {
     static var previews: some View {
-        LocationListCell()
+        LocationListCell(location: DDGLocation(record: MockData.location))
     }
 }
