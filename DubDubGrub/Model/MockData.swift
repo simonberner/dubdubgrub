@@ -13,7 +13,7 @@ struct MockData {
     static var location: CKRecord {
         // implicit get
         // fyi: the property is computed each time it is accessed
-        let record = CKRecord(recordType: "DDGLocation")
+        let record = CKRecord(recordType: RecordType.location)
         record[DDGLocation.kName] = "Simon's Grill and Chill"
         record[DDGLocation.kAddress] = "123 Chill Street"
         record[DDGLocation.kDescription] = "This is a description. Isn't it super cool! Not sure how long to make it to test 3 lines at once."

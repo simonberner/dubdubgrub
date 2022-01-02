@@ -10,7 +10,7 @@ import CloudKit
 // Object which maps to the DDGLocation CloudKit Record Type
 struct DDGLocation {
 
-    static let kName = "Name"
+    static let kName = "name"
     static let kDescription = "description"
     static let kSquareAsset = "squareAsset"
     static let kBannerAsset = "bannerAsset"
