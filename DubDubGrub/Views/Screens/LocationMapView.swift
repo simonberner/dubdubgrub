@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import OSLog
 
 struct LocationMapView: View {
 
@@ -29,9 +30,9 @@ struct LocationMapView: View {
                 switch result {
                     // getting back an array of locations
                 case .success(let locations):
-                    print(locations)
+                    Logger.locationMapView.info("\(locations)")
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    Logger.locationMapView.error("\(error.localizedDescription)")
                 }
             }
         }

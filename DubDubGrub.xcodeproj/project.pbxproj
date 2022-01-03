@@ -13,6 +13,7 @@
 		152F3E2C277B7AD80074D2B1 /* CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2B277B7AD80074D2B1 /* CustomModifiers.swift */; };
 		152F3E2E277BA8380074D2B1 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2D277BA8380074D2B1 /* View+Ext.swift */; };
 		152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2F277BAB600074D2B1 /* DDGButton.swift */; };
+		154C120B2782F6370015B7E4 /* Logger+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154C120A2782F6370015B7E4 /* Logger+Ext.swift */; };
 		1554BA22277E3C90006FB3C9 /* DDGLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1554BA21277E3C90006FB3C9 /* DDGLocation.swift */; };
 		15C684BF277F540F00067C4E /* DDGProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C684BE277F540F00067C4E /* DDGProfile.swift */; };
 		15C684C1277F657700067C4E /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C684C0277F657700067C4E /* MockData.swift */; };
@@ -57,6 +58,7 @@
 		152F3E2B277B7AD80074D2B1 /* CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModifiers.swift; sourceTree = "<group>"; };
 		152F3E2D277BA8380074D2B1 /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		152F3E2F277BAB600074D2B1 /* DDGButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGButton.swift; sourceTree = "<group>"; };
+		154C120A2782F6370015B7E4 /* Logger+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Ext.swift"; sourceTree = "<group>"; };
 		1554BA21277E3C90006FB3C9 /* DDGLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGLocation.swift; sourceTree = "<group>"; };
 		15C684BE277F540F00067C4E /* DDGProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGProfile.swift; sourceTree = "<group>"; };
 		15C684C0277F657700067C4E /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				15FB054A2770A7470036A003 /* Color+Ext.swift */,
 				152F3E2D277BA8380074D2B1 /* View+Ext.swift */,
 				15D325AC278232C30007FD17 /* CKRecord+Ext.swift */,
+				154C120A2782F6370015B7E4 /* Logger+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				1554BA22277E3C90006FB3C9 /* DDGLocation.swift in Sources */,
 				15175F162771CD2800CD6A30 /* LocationListCell.swift in Sources */,
 				15FB054E2770D6710036A003 /* AppTabView.swift in Sources */,
+				154C120B2782F6370015B7E4 /* Logger+Ext.swift in Sources */,
 				15D325A92780E8490007FD17 /* CloudKitManager.swift in Sources */,
 				152F3E2E277BA8380074D2B1 /* View+Ext.swift in Sources */,
 				15175F1827721DB300CD6A30 /* AvatarView.swift in Sources */,
