@@ -16,6 +16,8 @@ struct LocationMapView: View {
                                                                                   longitude: -121.891054),
                                                    span: MKCoordinateSpan(latitudeDelta: 0.01,
                                                                           longitudeDelta: 0.01))
+    @State var showAlert = false
+
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region).ignoresSafeArea(edges: .top)
@@ -25,6 +27,12 @@ struct LocationMapView: View {
                 Spacer()
             }
         }
+        // experimenting with the new iOS15 view modifier instead of using the AlertItem
+        .alert(Text("Locations Error"), isPresented: $showAlert) {
+                      Button("Ok", role: .cancel) { }
+                  } message: {
+                      Text("Unable to retrieve locations at this time. \n Please try again.")
+                  }
         .onAppear {
             CloudKitManager.getLocations { result in
                 switch result {
@@ -32,6 +40,7 @@ struct LocationMapView: View {
                 case .success(let locations):
                     Logger.locationMapView.info("\(locations)")
                 case .failure(let error):
+                    showAlert = true
                     Logger.locationMapView.error("\(error.localizedDescription)")
                 }
             }
