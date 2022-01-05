@@ -13,6 +13,6 @@ extension Logger {
     // but static (global) stored properties are
     private static let subsystem = Bundle.main.bundleIdentifier!
 
-    // Logs the LocationMapView
-    static let locationMapView = Logger(subsystem: subsystem, category: "LocationMapView")
+    // Logs the LocationMapViewModel
+    static let locationMapViewModel = Logger(subsystem: subsystem, category: "LocationMapViewModel")
 }
