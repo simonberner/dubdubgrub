@@ -13,10 +13,6 @@ struct LocationMapView: View {
 
     @StateObject private var viewModel = LocationMapViewModel()
 
-    init() {
-        viewModel.getLocations()
-    }
-
     var body: some View {
         ZStack {
             Map(coordinateRegion: $viewModel.region).ignoresSafeArea(edges: .top)
@@ -26,13 +22,13 @@ struct LocationMapView: View {
                 Spacer()
             }
         }
-        // experimenting with the new iOS15 view modifier instead of using the AlertItem
-        .alert(Text("Locations Error"), isPresented: $viewModel.showAlert) {
-                      Button("Ok", role: .cancel) { }
+        .alert(Text(viewModel.alertItem?.title ?? ""),
+               isPresented: $viewModel.showAlert) {
+            Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
                   } message: {
-                      Text("Unable to retrieve locations at this time. \n Please try again.")
+                      Text(viewModel.alertItem?.message ?? "")
                   }
-        // tip: get the locations either here or above in the init
+        // tip: put the call in the view models init
 //        .onAppear {
 //            viewModel.getLocations()
 //        }
