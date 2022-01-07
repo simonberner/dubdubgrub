@@ -8,7 +8,7 @@
 import CloudKit
 
 // Object which maps to the DDGLocation CloudKit Record Type
-struct DDGLocation {
+struct DDGLocation: Identifiable {
 
     static let kName = "name"
     static let kDescription = "description"
@@ -19,7 +19,7 @@ struct DDGLocation {
     static let kWebsiteURL = "websiteURL"
     static let kPhoneNumber = "phoneNumber"
 
-    let ckRecordId: CKRecord.ID
+    let id: CKRecord.ID
     let name: String
     let description: String
     let squareAsset: CKAsset! //implicitly unwrapping of the optional (handling the nil case later on with a default image asset)
@@ -31,7 +31,7 @@ struct DDGLocation {
 
     // creating our own initializer because we get a CKRecord back when querying CloudKit database
     init(record: CKRecord) {
-        ckRecordId = record.recordID
+        id = record.recordID
         name = record[DDGLocation.kName] as? String ?? "N/A" // record is a key-value pair
         description = record[DDGLocation.kDescription] as? String ?? "N/A"
         squareAsset = record[DDGLocation.kSquareAsset] as? CKAsset

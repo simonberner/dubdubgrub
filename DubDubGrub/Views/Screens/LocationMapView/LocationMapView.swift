@@ -11,11 +11,15 @@ import OSLog
 
 struct LocationMapView: View {
 
+    @EnvironmentObject private var locationManager: LocationManager
     @StateObject private var viewModel = LocationMapViewModel()
 
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $viewModel.region).ignoresSafeArea(edges: .top)
+            Map(coordinateRegion: $viewModel.region, annotationItems: locationManager.locations) { location in
+                MapMarker(coordinate: location.location.coordinate, tint: .brandPrimary)
+            }
+            .ignoresSafeArea(edges: .top)
 
             VStack {
                 LogoView().shadow(radius: 10)
@@ -28,10 +32,12 @@ struct LocationMapView: View {
                   } message: {
                       Text(viewModel.alertItem?.message ?? "")
                   }
-        // tip: put the call in the view models init
-//        .onAppear {
-//            viewModel.getLocations()
-//        }
+        .onAppear {
+            if locationManager.locations.isEmpty {
+                // pass in a reference to the locationManager (as the view model is a class)!
+                viewModel.getLocations(for: locationManager)
+            }
+        }
     }
 }
 
