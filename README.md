@@ -8,7 +8,7 @@ check-in/out at nearby restaurants/bars to meet like-minded developers.
 
 ## Naming
 The annual developer convention hosted by Apple where they talk about all the new stuff coming for developers, is called the
-Apple World Wide Developer Convention or “WWDC” for short. People commonly call this event “Dub Dub” as a shortened form of “WWDC”.
+Apple World Wide Developer Conference or “WWDC” for short. People commonly call this event “Dub Dub” as a shortened form of “WWDC”.
 
 - WWDC = “Dub Dub”
 - Food you eat = “Grub”
@@ -18,17 +18,26 @@ Therefore: “Dub Dub Grub”
 (Siri pronounces WWDC as "dub-dub-dee-see")
 
 ## Screens
-First screens are coming soon 😉
+Coming soon...
 
 ## App Store
-Not yet
+This app won't be available in the App Store.
+
+## Test Flight
+Coming soon...
 
 ## Used Technologies
 - Swift 5.5
 - SwiftUI
 - [CloudKit](https://developer.apple.com/icloud/cloudkit/)
 - [MapKit](https://developer.apple.com/documentation/mapkit)
+- [CoreLocation](https://developer.apple.com/documentation/corelocation)
+- OSLog
+- [Async await](https://www.hackingwithswift.com/swift/5.5/async-await)
 - XCTest
+
+## Architecture
+- MVVM
 
 ## A word on 3rd Party Libraries
 By not using 3rd party libraries in your project, you are going to learn more. Especially if it is a small projects. Unless you
@@ -67,17 +76,52 @@ It is available on all Apple Platforms.
 - The 'Users' record type is what you get with the automatic authentication. As soon as somebody comes with an iCloud account, it creates
 a record of this type. The restriction though is, that you can't query it. That is why we have to create a DDGProfile object.
 - As a custom field, we have to add a userProfile as a reference to the DDGProfile object.
-- We have to define which fields of a Record Type are searchable, queryable or sortable 
+- We have to define which fields of a Record Type are searchable, queryable or sortable
+
+### MapKit & CoreLocation
+- They are independent frameworks but go very good hand in hand
+#### MapKit
+- 
+#### CoreLocation
+With it we can get access to:
+- GPS
+- Wi-Fi
+- Bluetooth
+- Barometer
+- Celluar
+
+to get infos like:
+- Location
+- Altitude
+- iBeacons
+- Region
+- Monitoring
+
+### Async await (since Swift 5.5)
+- [Async await](https://www.avanderlee.com/swift/async-await/)
+- [@MainActor](https://www.avanderlee.com/swift/mainactor-dispatch-main-thread/)
+
 ### Note on learning from videos
 Rewatching videos after I have build and experimented with a certain framework, they make so much more sense to me.
+
 ### Initializers
 - Pro tip: put your custom initializer in an extension if you want to keep the memberwise initializer.
+
 ### Logging in Swift (>iOS14)
 - [OSLog is the future of logging](https://www.avanderlee.com/workflow/oslog-unified-logging/#improved-apis-in-ios-14-and-up)
+
 ### Extensions
 - [Extensions can add new computed properties, but they can’t add stored instance properties (static are allowed), or add property observers to existing properties.](https://docs.swift.org/swift-book/LanguageGuide/Extensions.html#ID152)
 - [Stored properties in extensions - old post from 2017](https://medium.com/@marcosantadev/stored-properties-in-swift-extensions-615d4c5a9a58)
 - [We can add Subscripts to a Type](https://docs.swift.org/swift-book/LanguageGuide/Extensions.html#ID156)
+
+### Design Patterns and Architectures
+Design patterns and architectures are guidelines for your code. You don't have to follow them at all costs!
+- [Swift design patterns and iOS architectures](https://theswiftdev.com/the-ultimate-viper-architecture-tutorial/)
+#### MVVM
+- Model: reflects the data layer
+- View: the view layer shows what the ViewModel is publishing
+- ViewModel: the business logic is an ObservableObject (final class) where Views can subscribe (observe) to. It connects the View with the Model
 
 ## Code comments
 For learning purposes, I have added lots of comments alongside the code. I am aware that this would propably be ommitted in 'production' code ;)
