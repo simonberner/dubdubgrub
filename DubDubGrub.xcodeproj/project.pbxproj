@@ -26,7 +26,7 @@
 		15FB051D27708FF70036A003 /* DubDubGrubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FB051C27708FF70036A003 /* DubDubGrubApp.swift */; };
 		15FB052127708FFA0036A003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15FB052027708FFA0036A003 /* Assets.xcassets */; };
 		15FB052427708FFA0036A003 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15FB052327708FFA0036A003 /* Preview Assets.xcassets */; };
-		15FB052E27708FFA0036A003 /* DubDubGrubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FB052D27708FFA0036A003 /* DubDubGrubTests.swift */; };
+		15FB052E27708FFA0036A003 /* CloudKitManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FB052D27708FFA0036A003 /* CloudKitManagerTests.swift */; };
 		15FB053827708FFA0036A003 /* DubDubGrubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FB053727708FFA0036A003 /* DubDubGrubUITests.swift */; };
 		15FB053A27708FFA0036A003 /* DubDubGrubUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FB053927708FFA0036A003 /* DubDubGrubUITestsLaunchTests.swift */; };
 		15FB05492770937B0036A003 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15FB05482770937B0036A003 /* CloudKit.framework */; };
@@ -76,7 +76,7 @@
 		15FB052027708FFA0036A003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		15FB052327708FFA0036A003 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		15FB052927708FFA0036A003 /* DubDubGrubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DubDubGrubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		15FB052D27708FFA0036A003 /* DubDubGrubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DubDubGrubTests.swift; sourceTree = "<group>"; };
+		15FB052D27708FFA0036A003 /* CloudKitManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManagerTests.swift; sourceTree = "<group>"; };
 		15FB053327708FFA0036A003 /* DubDubGrubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DubDubGrubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		15FB053727708FFA0036A003 /* DubDubGrubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DubDubGrubUITests.swift; sourceTree = "<group>"; };
 		15FB053927708FFA0036A003 /* DubDubGrubUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DubDubGrubUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -237,7 +237,7 @@
 		15FB052C27708FFA0036A003 /* DubDubGrubTests */ = {
 			isa = PBXGroup;
 			children = (
-				15FB052D27708FFA0036A003 /* DubDubGrubTests.swift */,
+				15FB052D27708FFA0036A003 /* CloudKitManagerTests.swift */,
 			);
 			path = DubDubGrubTests;
 			sourceTree = "<group>";
@@ -440,7 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15FB052E27708FFA0036A003 /* DubDubGrubTests.swift in Sources */,
+				15FB052E27708FFA0036A003 /* CloudKitManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
