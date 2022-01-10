@@ -6,6 +6,7 @@
 //
 
 import CloudKit
+import UIKit
 
 // Object which maps to the DDGLocation CloudKit Record Type
 struct DDGLocation: Identifiable {
@@ -41,6 +42,16 @@ struct DDGLocation: Identifiable {
         websiteURL = record[DDGLocation.kWebsiteURL] as? String ?? "N/A"
         phoneNumber = record[DDGLocation.kPhoneNumber] as? String ?? "N/A"
 
+    }
+
+    func createSquareAsset() -> UIImage {
+        guard let asset = squareAsset else { return PlaceholderImage.square }
+        return asset.convertToUIImage(in: .square)
+    }
+
+    func createBannerAsset() -> UIImage {
+        guard let asset = bannerAsset else { return PlaceholderImage.banner }
+        return asset.convertToUIImage(in: .banner)
     }
 
 }
