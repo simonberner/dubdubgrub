@@ -25,13 +25,23 @@ enum PlaceholderImage {
 enum ImageDimension {
     case square, banner
 
-    static func getPlaceholder(for dimension: ImageDimension) -> UIImage {
-        //        return dimension == .square ? PlaceholderImage.square : PlaceholderImage.banner
-        switch dimension {
+    // using a computed property on self, instead of the static func and passing in the dimension
+    var placeholderImage: UIImage {
+        switch self {
         case .square:
             return PlaceholderImage.square
         case .banner:
             return PlaceholderImage.banner
         }
     }
+
+//    static func getPlaceholder(for dimension: ImageDimension) -> UIImage {
+//        //        return dimension == .square ? PlaceholderImage.square : PlaceholderImage.banner
+//        switch dimension {
+//        case .square:
+//            return PlaceholderImage.square
+//        case .banner:
+//            return PlaceholderImage.banner
+//        }
+//    }
 }

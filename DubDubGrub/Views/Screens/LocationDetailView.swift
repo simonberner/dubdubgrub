@@ -16,7 +16,7 @@ struct LocationDetailView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            BannerImageView(image: location.createBannerAsset())
+            BannerImageView(image: location.getImage(for: .banner))
 
             HStack {
                 AddressView(address: location.address)

@@ -44,14 +44,26 @@ struct DDGLocation: Identifiable {
 
     }
 
-    func createSquareAsset() -> UIImage {
-        guard let asset = squareAsset else { return PlaceholderImage.square }
-        return asset.convertToUIImage(in: .square)
+    // DRY
+    func getImage(for dimension: ImageDimension) -> UIImage {
+        let placeholder = dimension.placeholderImage
+
+        switch dimension {
+        case .square:
+            return squareAsset?.convertToUIImage(in: dimension) ?? placeholder
+        case .banner:
+            return bannerAsset?.convertToUIImage(in: dimension) ?? placeholder
+        }
     }
 
-    func createBannerAsset() -> UIImage {
-        guard let asset = bannerAsset else { return PlaceholderImage.banner }
-        return asset.convertToUIImage(in: .banner)
-    }
+//    func createSquareAsset() -> UIImage {
+//        guard let asset = squareAsset else { return PlaceholderImage.square }
+//        return asset.convertToUIImage(in: .square)
+//    }
+//
+//    func createBannerAsset() -> UIImage {
+//        guard let asset = bannerAsset else { return PlaceholderImage.banner }
+//        return asset.convertToUIImage(in: .banner)
+//    }
 
 }

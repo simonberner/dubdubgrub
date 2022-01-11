@@ -13,7 +13,7 @@ struct LocationListCell: View {
 
     var body: some View {
         HStack {
-            Image(uiImage: location.createSquareAsset())
+            Image(uiImage: location.getImage(for: .square))
                 .resizable()
                 .scaledToFit()
                 .frame(width: 80, height: 80)
