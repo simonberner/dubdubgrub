@@ -26,6 +26,7 @@
 		15D325AB2781C51E0007FD17 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D325AA2781C51E0007FD17 /* Constants.swift */; };
 		15D325AD278232C30007FD17 /* CKRecord+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D325AC278232C30007FD17 /* CKRecord+Ext.swift */; };
 		15DB7C4527860D3A00BEC16F /* LocationMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DB7C4427860D3A00BEC16F /* LocationMapViewModel.swift */; };
+		15F6FC6827904FC400FC2C67 /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F6FC6727904FC400FC2C67 /* DismissButton.swift */; };
 		15FB051D27708FF70036A003 /* DubDubGrubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FB051C27708FF70036A003 /* DubDubGrubApp.swift */; };
 		15FB052127708FFA0036A003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15FB052027708FFA0036A003 /* Assets.xcassets */; };
 		15FB052427708FFA0036A003 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15FB052327708FFA0036A003 /* Preview Assets.xcassets */; };
@@ -77,6 +78,7 @@
 		15D325AA2781C51E0007FD17 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		15D325AC278232C30007FD17 /* CKRecord+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Ext.swift"; sourceTree = "<group>"; };
 		15DB7C4427860D3A00BEC16F /* LocationMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapViewModel.swift; sourceTree = "<group>"; };
+		15F6FC6727904FC400FC2C67 /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		15FB051927708FF70036A003 /* DubDubGrub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DubDubGrub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15FB051C27708FF70036A003 /* DubDubGrubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DubDubGrubApp.swift; sourceTree = "<group>"; };
 		15FB052027708FFA0036A003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -154,7 +156,6 @@
 			isa = PBXGroup;
 			children = (
 				15175F1727721DB300CD6A30 /* AvatarView.swift */,
-				152F3E2F277BAB600074D2B1 /* DDGButton.swift */,
 				159B6B8B278F75AC007A4912 /* LogoView.swift */,
 			);
 			path = CustomViews;
@@ -197,6 +198,15 @@
 				15DB7C4427860D3A00BEC16F /* LocationMapViewModel.swift */,
 			);
 			path = LocationMapView;
+			sourceTree = "<group>";
+		};
+		15F6FC6627904F3C00FC2C67 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				15F6FC6727904FC400FC2C67 /* DismissButton.swift */,
+				152F3E2F277BAB600074D2B1 /* DDGButton.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		15FB051027708FF70036A003 = {
@@ -282,6 +292,7 @@
 		15FB054F2770D67D0036A003 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				15F6FC6627904F3C00FC2C67 /* Buttons */,
 				152F3E2A277B7ACA0074D2B1 /* Modifiers */,
 				152F3E33277BB1BF0074D2B1 /* CustomViews */,
 				15175F142771CD1800CD6A30 /* Cells */,
@@ -422,6 +433,7 @@
 			files = (
 				15FB054B2770A7470036A003 /* Color+Ext.swift in Sources */,
 				15D325AB2781C51E0007FD17 /* Constants.swift in Sources */,
+				15F6FC6827904FC400FC2C67 /* DismissButton.swift in Sources */,
 				152F3E2C277B7AD80074D2B1 /* CustomModifiers.swift in Sources */,
 				15FB05512770D7140036A003 /* LocationMapView.swift in Sources */,
 				159B6B8A278F3E5B007A4912 /* OnboardView.swift in Sources */,
