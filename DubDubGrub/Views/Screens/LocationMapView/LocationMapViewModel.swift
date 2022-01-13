@@ -9,9 +9,9 @@ import MapKit
 import OSLog
 
 // ObservableObject: others can observe instances of this class
-// @MainActor: Anything in this class will be rerouted to the main (UI) queue/thread
-@MainActor final class LocationMapViewModel: NSObject, ObservableObject {
+final class LocationMapViewModel: NSObject, ObservableObject {
 
+    @Published var isShowingOnboardView = false
     @Published var showAlert = false
     @Published var alertItem: AlertItem?
     
@@ -23,6 +23,20 @@ import OSLog
 
     // is an optional because the location services can be turned off on the phone
     var deviceLocationManager: CLLocationManager?
+    let keyHasSeenOnboardView = "hasSeenOnboardView"
+
+    var hasSeenOnboardView: Bool {
+        UserDefaults.standard.bool(forKey: keyHasSeenOnboardView) // false if it isn't set
+    }
+
+    func runStartupChecks() {
+        if !hasSeenOnboardView {
+            isShowingOnboardView = true
+            UserDefaults.standard.set(true, forKey: keyHasSeenOnboardView)
+        } else {
+            checkLocationServicesIsEnabled()
+        }
+    }
 
     func checkLocationServicesIsEnabled() {
        if CLLocationManager.locationServicesEnabled() {
@@ -67,7 +81,8 @@ import OSLog
     //        getLocations()
     //    }
 
-    func getLocations(for locationManager: LocationManager) {
+    // @MainActor: Anything in this method will be rerouted to the main (UI) queue/thread
+    @MainActor func getLocations(for locationManager: LocationManager) {
         CloudKitManager.getLocations { [self] result in
             Task {
                 switch result {

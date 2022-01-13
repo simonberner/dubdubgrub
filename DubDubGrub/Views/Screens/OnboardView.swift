@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct OnboardView: View {
-    @Binding var isShowingDetail: Bool
+
+    @Binding var isShowingOnboardView: Bool
 
     var body: some View {
         // GeometryReader: container view that defines its own size from
@@ -16,7 +17,7 @@ struct OnboardView: View {
         // (children) via a GeometryProxy
         GeometryReader { proxy in
             VStack {
-                LogoView(frameWidth: 250)
+                LogoView(frameWidth: proxy.size.width)
                     .padding(.bottom)
                 VStack(alignment: .leading, spacing: 34) {
                     OnboardInfoView(imageName: "building.2.crop.circle",
@@ -34,10 +35,8 @@ struct OnboardView: View {
             .frame(width: proxy.size.width, height: proxy.size.height)
             .cornerRadius(20)
             .background(Color(.systemBackground))
-            .overlay(DismissButton(isShowingDetail: $isShowingDetail), alignment: .topTrailing)
+            .overlay(DismissButton(isShowingOnboardView: $isShowingOnboardView), alignment: .topTrailing)
         }
-        .padding()
-
     }
 }
 
@@ -66,6 +65,6 @@ struct OnboardInfoView: View {
 
 struct OnboardView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardView(isShowingDetail: .constant(true))
+        OnboardView(isShowingOnboardView: .constant(true))
     }
 }

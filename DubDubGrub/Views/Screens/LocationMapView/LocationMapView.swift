@@ -28,6 +28,10 @@ struct LocationMapView: View {
                 Spacer()
             }
         }
+        .sheet(isPresented: $viewModel.isShowingOnboardView, onDismiss: viewModel.checkLocationServicesIsEnabled) {
+            // closure the returns the content of the sheet
+            OnboardView(isShowingOnboardView: $viewModel.isShowingOnboardView)
+        }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
             Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
@@ -35,8 +39,7 @@ struct LocationMapView: View {
                       Text(viewModel.alertItem?.message ?? "")
                   }
         .onAppear {
-            viewModel.checkLocationServicesIsEnabled()
-            
+            viewModel.runStartupChecks()
             if locationManager.locations.isEmpty {
                 // pass in a reference to the locationManager (as the view model is a class)!
                 viewModel.getLocations(for: locationManager)

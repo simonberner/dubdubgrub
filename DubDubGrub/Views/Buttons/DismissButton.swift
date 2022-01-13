@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct DismissButton: View {
-    @Binding var isShowingDetail: Bool
+
+    @Binding var isShowingOnboardView: Bool
 
     var body: some View {
         Button {
-            isShowingDetail = false
+            isShowingOnboardView = false
         } label: {
             Image(systemName: "xmark.circle.fill")
                 .foregroundColor(.brandPrimary)
@@ -24,6 +25,6 @@ struct DismissButton: View {
 
 struct DismissButton_Previews: PreviewProvider {
     static var previews: some View {
-        DismissButton(isShowingDetail: .constant(true))
+        DismissButton(isShowingOnboardView: .constant(true))
     }
 }
