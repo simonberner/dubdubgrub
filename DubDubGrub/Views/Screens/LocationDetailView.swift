@@ -64,15 +64,16 @@ struct LocationDetailView: View {
             ScrollView {
                 // only 10 views can be placed in the grid
                 LazyVGrid(columns: columns, content: {
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
-                    FirstNameAvatarView(firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
                 })
             }
             Spacer()
@@ -105,11 +106,12 @@ struct LocationActionButton: View {
 
 struct FirstNameAvatarView: View {
 
+    var image: UIImage
     var firstName: String
 
     var body: some View {
         VStack {
-            AvatarView(size: 64)
+            AvatarView(image: image, size: 64)
 
             Text(firstName)
                 .bold()

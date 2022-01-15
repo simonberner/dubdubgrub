@@ -14,6 +14,8 @@ struct ProfileView: View {
     @State private var lastName = ""
     @State private var companyName = ""
     @State private var bio = ""
+    @State private var avatar = PlaceholderImage.avatar
+    @State private var isShowingPhotoPicker = false
 
     var body: some View {
 
@@ -21,8 +23,11 @@ struct ProfileView: View {
             GroupBox {
                 HStack(spacing: 16) {
                     ZStack {
-                        AvatarView(size: 80)
+                        AvatarView(image: avatar, size: 80)
                         EditImage()
+                    }
+                    .onTapGesture {
+                        isShowingPhotoPicker = true
                     }
 
                     VStack(spacing: 1) {
@@ -80,7 +85,9 @@ struct ProfileView: View {
 
         }
         .navigationTitle("Profile")
-        
+        .sheet(isPresented: $isShowingPhotoPicker) {
+            PhotoPicker(image: $avatar)
+        }
     }
 }
 

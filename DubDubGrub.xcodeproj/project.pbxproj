@@ -10,6 +10,7 @@
 		15175F162771CD2800CD6A30 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15175F152771CD2800CD6A30 /* LocationListCell.swift */; };
 		15175F1827721DB300CD6A30 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15175F1727721DB300CD6A30 /* AvatarView.swift */; };
 		15175F1A2772778400CD6A30 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15175F192772778400CD6A30 /* LocationDetailView.swift */; };
+		151FEEB62791CAE200A85A8C /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEEB52791CAE200A85A8C /* PhotoPicker.swift */; };
 		152F3E2C277B7AD80074D2B1 /* CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2B277B7AD80074D2B1 /* CustomModifiers.swift */; };
 		152F3E2E277BA8380074D2B1 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2D277BA8380074D2B1 /* View+Ext.swift */; };
 		152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2F277BAB600074D2B1 /* DDGButton.swift */; };
@@ -62,6 +63,7 @@
 		15175F152771CD2800CD6A30 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		15175F1727721DB300CD6A30 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		15175F192772778400CD6A30 /* LocationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
+		151FEEB52791CAE200A85A8C /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		152F3E2B277B7AD80074D2B1 /* CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModifiers.swift; sourceTree = "<group>"; };
 		152F3E2D277BA8380074D2B1 /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		152F3E2F277BAB600074D2B1 /* DDGButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGButton.swift; sourceTree = "<group>"; };
@@ -131,6 +133,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		151FEEB42791CA5A00A85A8C /* UIKitComponents */ = {
+			isa = PBXGroup;
+			children = (
+				151FEEB52791CAE200A85A8C /* PhotoPicker.swift */,
+			);
+			path = UIKitComponents;
+			sourceTree = "<group>";
+		};
 		152F3E2A277B7ACA0074D2B1 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +165,7 @@
 		152F3E33277BB1BF0074D2B1 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				151FEEB42791CA5A00A85A8C /* UIKitComponents */,
 				15175F1727721DB300CD6A30 /* AvatarView.swift */,
 				159B6B8B278F75AC007A4912 /* LogoView.swift */,
 			);
@@ -451,6 +462,7 @@
 				15D0FEA92784B88E009EF141 /* AlertItem.swift in Sources */,
 				152F3E2E277BA8380074D2B1 /* View+Ext.swift in Sources */,
 				15175F1827721DB300CD6A30 /* AvatarView.swift in Sources */,
+				151FEEB62791CAE200A85A8C /* PhotoPicker.swift in Sources */,
 				15D325AD278232C30007FD17 /* CKRecord+Ext.swift in Sources */,
 				159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */,
 				152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */,
