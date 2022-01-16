@@ -15,4 +15,7 @@ extension Logger {
 
     // Logs the LocationMapViewModel
     static let locationMapViewModel = Logger(subsystem: subsystem, category: "LocationMapViewModel")
+
+    // Log the UIImage+Ext
+    static let uiImageExt = Logger(subsystem: subsystem, category: "UIImage+Ext")
 }

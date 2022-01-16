@@ -16,6 +16,7 @@
 		152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152F3E2F277BAB600074D2B1 /* DDGButton.swift */; };
 		154C120B2782F6370015B7E4 /* Logger+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154C120A2782F6370015B7E4 /* Logger+Ext.swift */; };
 		1554BA22277E3C90006FB3C9 /* DDGLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1554BA21277E3C90006FB3C9 /* DDGLocation.swift */; };
+		155808E3279497D8007443A6 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155808E2279497D8007443A6 /* UIImage+Ext.swift */; };
 		1596BE64278C6D3D0001D2BE /* CKAsset+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */; };
 		159B6B8A278F3E5B007A4912 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B6B89278F3E5B007A4912 /* OnboardView.swift */; };
 		159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B6B8B278F75AC007A4912 /* LogoView.swift */; };
@@ -69,6 +70,7 @@
 		152F3E2F277BAB600074D2B1 /* DDGButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGButton.swift; sourceTree = "<group>"; };
 		154C120A2782F6370015B7E4 /* Logger+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Ext.swift"; sourceTree = "<group>"; };
 		1554BA21277E3C90006FB3C9 /* DDGLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGLocation.swift; sourceTree = "<group>"; };
+		155808E2279497D8007443A6 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
 		159B6B89278F3E5B007A4912 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
 		159B6B8B278F75AC007A4912 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				15D325AC278232C30007FD17 /* CKRecord+Ext.swift */,
 				154C120A2782F6370015B7E4 /* Logger+Ext.swift */,
 				1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */,
+				155808E2279497D8007443A6 /* UIImage+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				152F3E2E277BA8380074D2B1 /* View+Ext.swift in Sources */,
 				15175F1827721DB300CD6A30 /* AvatarView.swift in Sources */,
 				151FEEB62791CAE200A85A8C /* PhotoPicker.swift in Sources */,
+				155808E3279497D8007443A6 /* UIImage+Ext.swift in Sources */,
 				15D325AD278232C30007FD17 /* CKRecord+Ext.swift in Sources */,
 				159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */,
 				152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */,
