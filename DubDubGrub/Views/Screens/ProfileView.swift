@@ -16,6 +16,15 @@ struct ProfileView: View {
     @State private var bio = ""
     @State private var avatar = PlaceholderImage.avatar
     @State private var isShowingPhotoPicker = false
+    @State private var alertItem: AlertItem?
+    @State private var showAlert = false
+
+    @FocusState private var focusedTextField: ProfileTextField?
+    @FocusState private var dismissKeyboard: Bool
+
+    enum ProfileTextField {
+    case firstname, lastname, companyName, bio
+    }
 
     var body: some View {
 
@@ -33,14 +42,23 @@ struct ProfileView: View {
                     VStack(spacing: 1) {
                         TextField("First Name", text: $firstName)
                             .profileNameStyle()
+                            .focused($focusedTextField, equals: .firstname)
+                            .onSubmit { focusedTextField = .lastname }
+                            .submitLabel(.next)
 
                         TextField("Last Name", text: $lastName)
                             .profileNameStyle()
+                            .focused($focusedTextField, equals: .lastname)
+                            .onSubmit { focusedTextField = .companyName }
+                            .submitLabel(.next)
 
                         TextField("Company Name", text: $companyName)
+                            .focused($focusedTextField, equals: .companyName)
+                            .onSubmit { focusedTextField = .bio }
+                            .submitLabel(.next)
                     }
+                    .focused($dismissKeyboard)
                     .padding(.trailing, 16)
-
 
                     Spacer()
                 }
@@ -67,10 +85,13 @@ struct ProfileView: View {
                     }
                 }
 
+                // Bio Text - 100 characters limited
                 TextEditor(text: $bio)
                     .frame(height: 100)
                     .overlay(RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.secondary, lineWidth: 1))
+                    .focused($focusedTextField, equals: .bio)
+                    .focused($dismissKeyboard)
             }
             .padding(.horizontal)
 
@@ -78,16 +99,58 @@ struct ProfileView: View {
             Spacer()
 
             Button {
-
+                createProfile()
             } label: {
                 DDGButton(title: "Create Profile")
+                    .padding()
             }
 
         }
         .navigationTitle("Profile")
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                HStack {
+                    Spacer()
+                    Button {
+                        dismissKeyboard.toggle()
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .foregroundColor(.brandPrimary)
+                    }
+
+                }
+            }
+        }
+        .alert(Text(alertItem?.title ?? ""),
+               isPresented: $showAlert) {
+            Button(alertItem?.buttonText ?? "", role: .cancel) { }
+                  } message: {
+                      Text(alertItem?.message ?? "")
+                  }
         .sheet(isPresented: $isShowingPhotoPicker) {
             PhotoPicker(image: $avatar)
         }
+    }
+
+    func isValidProfile() -> Bool {
+
+        guard !firstName.isEmpty,
+              !lastName.isEmpty,
+              !companyName.isEmpty,
+              !bio.isEmpty,
+              avatar != PlaceholderImage.avatar,
+              bio.count <= 100 else { return false }
+        
+        return true
+    }
+
+    func createProfile() {
+        guard isValidProfile() else {
+            showAlert = true
+            alertItem = AlertContext.invalidProfileForm
+            return
+        }
+        // create profile and send it up to CloudKit
     }
 }
 
