@@ -101,7 +101,7 @@ struct ProfileView: View {
             Spacer()
 
             Button {
-                saveUserProfile()
+//                saveUserProfile()
             } label: {
                 DDGButton(title: "Create Profile")
                     .padding()
@@ -119,10 +119,12 @@ struct ProfileView: View {
                         Image(systemName: "keyboard.chevron.compact.down")
                             .foregroundColor(.brandPrimary)
                     }
-
                 }
             }
         }
+        .onAppear(perform: {
+            getProfile()
+        })
         .alert(Text(alertItem?.title ?? ""),
                isPresented: $showAlert) {
             Button(alertItem?.buttonText ?? "", role: .cancel) { }
@@ -191,12 +193,51 @@ struct ProfileView: View {
                         Logger.profileView.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
                         return
                     }
-                    
+
                     Logger.profileView.info("Saved records to CloudKit: \(savedRecords)")
                 }
 
                 // run the operation (to save the records)
                 CKContainer.default().publicCloudDatabase.add(operation)
+            }
+        }
+    }
+
+    func getProfile() {
+        // Get user recordID - network call to CK
+        CKContainer.default().fetchUserRecordID { recordID, error in
+            guard let recordID = recordID, error == nil else {
+                Logger.profileView.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
+                return
+            }
+            // Get the UserRecord from the CK Public Database - network call to CK
+            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
+                guard let userRecord = userRecord, error == nil else {
+                    Logger.profileView.error("Fetching UserRecord failed: \(error!.localizedDescription)")
+                    return
+                }
+
+                let profileReference = userRecord["userProfile"] as! CKRecord.Reference
+                let profileRecordID = profileReference.recordID
+
+                // Get the profileRecord - network call to CK
+                CKContainer.default().publicCloudDatabase.fetch(withRecordID: profileRecordID) { profileRecord, error in
+                    guard let profileRecord = profileRecord, error == nil else {
+                        Logger.profileView.error("Fetching profileRecord failed: \(error!.localizedDescription)")
+                        return
+                    }
+
+                    // Go to the main thread and create a DDGProfile from the above profileRecord
+                    // to populate the UI
+                    DispatchQueue.main.async {
+                        let profile = DDGProfile(record: profileRecord) // convert
+                        firstName = profile.firstName
+                        lastName = profile.lastName
+                        companyName = profile.companyName
+                        bio = profile.bio
+                        avatar = profile.getImage(for: .square)
+                    }
+                }
             }
         }
     }

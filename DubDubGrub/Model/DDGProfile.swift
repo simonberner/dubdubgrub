@@ -6,6 +6,7 @@
 //
 
 import CloudKit
+import UIKit
 
 // Object which maps to the DDGProfile CloudKit Record Type
 struct DDGProfile {
@@ -33,6 +34,17 @@ struct DDGProfile {
         avatar = record[DDGProfile.kAvatar] as? CKAsset
         companyName = record[DDGProfile.kCompanyName] as? String ?? "N/A"
         bio = record[DDGProfile.kBio] as? String ?? "N/A"
+    }
+
+    func getImage(for dimension: ImageDimension) -> UIImage {
+        let placeholder = dimension.placeholderImage
+
+        switch dimension {
+        case .square:
+            return avatar?.convertToUIImage(in: dimension) ?? placeholder
+        case .banner:
+            return avatar?.convertToUIImage(in: dimension) ?? placeholder
+        }
     }
 
 }
