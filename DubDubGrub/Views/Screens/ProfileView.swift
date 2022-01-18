@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import CloudKit
+import OSLog
 
 struct ProfileView: View {
 
-    // TODO: these will go into the view model later on
+    // TODO: refactor out to ProfileViewModel
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var companyName = ""
@@ -99,7 +101,7 @@ struct ProfileView: View {
             Spacer()
 
             Button {
-                createProfile()
+                saveUserProfile()
             } label: {
                 DDGButton(title: "Create Profile")
                     .padding()
@@ -144,13 +146,59 @@ struct ProfileView: View {
         return true
     }
 
-    func createProfile() {
+    // TODO: refactor out to CloudKitManager
+    func saveUserProfile() {
+        // Have we a valid profile?
         guard isValidProfile() else {
             showAlert = true
             alertItem = AlertContext.invalidProfileForm
             return
         }
-        // create profile and send it up to CloudKit
+        // Create a CKRecord from the profile data
+        let profileRecord = CKRecord(recordType: RecordType.profile)
+        profileRecord[DDGProfile.kFirstName] = firstName
+        profileRecord[DDGProfile.kLastName] = lastName
+        profileRecord[DDGProfile.kCompanyName] = companyName
+        profileRecord[DDGProfile.kBio] = bio
+        profileRecord[DDGProfile.kAvatar] = avatar.convertToCKAsset()
+
+        // Get the UserRecordID from the CK Container
+        // TODO: refactor to us async userRecordID()
+        CKContainer.default().fetchUserRecordID { recordID, error in
+            guard let recordID = recordID, error == nil else {
+                Logger.profileView.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
+                return
+            }
+
+            // Get the UserRecord from the CK Public Database
+            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
+                guard let userRecord = userRecord, error == nil else {
+                    Logger.profileView.error("Fetching UserRecord failed: \(error!.localizedDescription)")
+                    return
+                }
+
+                // Create a reference from the userRecord to the user profileRecord
+                // action -> .deleteSelf: when the user profile gets deleted, also delete the associated profile
+                // (when the parent gets deleted, also delete (my)self)
+                userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
+
+                // Create a CKOperation to save the userRecord and profileRecord
+                let operation = CKModifyRecordsOperation(recordsToSave: [userRecord, profileRecord])
+                // completion block
+                // (if it was successful we get savedRecords back or deletedRecords which we ignore here, otherwise an error)
+                operation.modifyRecordsCompletionBlock = { savedRecords, _, error in
+                    guard let savedRecords = savedRecords, error == nil else {
+                        Logger.profileView.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
+                        return
+                    }
+                    
+                    Logger.profileView.info("Saved records to CloudKit: \(savedRecords)")
+                }
+
+                // run the operation (to save the records)
+                CKContainer.default().publicCloudDatabase.add(operation)
+            }
+        }
     }
 }
 

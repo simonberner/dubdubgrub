@@ -18,4 +18,7 @@ extension Logger {
 
     // Log the UIImage+Ext
     static let uiImageExt = Logger(subsystem: subsystem, category: "UIImage+Ext")
+
+    // Log the ProfileView
+    static let profileView = Logger(subsystem: subsystem, category: "ProfileView")
 }

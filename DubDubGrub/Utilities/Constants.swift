@@ -12,7 +12,7 @@ import UIKit
 
 enum RecordType {
     static let location = "DDGLocation"
-    static let profile = "Profile"
+    static let profile = "DDGProfile"
 }
 
 enum PlaceholderImage {

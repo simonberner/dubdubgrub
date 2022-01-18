@@ -11,7 +11,7 @@ import OSLog
 
 extension UIImage {
 
-    func convertToCKAssset() -> CKAsset? {
+    func convertToCKAsset() -> CKAsset? {
         // Get the apps base document directory url
         guard let urlPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             Logger.uiImageExt.error("Document Directory url came back nil!")
@@ -30,11 +30,11 @@ extension UIImage {
         do {
             // Write the data to the address
             try imageData.write(to: fileUrl)
-            Logger.uiImageExt.info("ImageData written to the CloudKit url: \(fileUrl)")
+            Logger.uiImageExt.info("ImageData written to: \(fileUrl)")
             // Return a CKAsset from the Data at that address
             return CKAsset(fileURL: fileUrl)
         } catch {
-            Logger.uiImageExt.error("Couldn't write the imageData to the CloudKit url: \(fileUrl)")
+            Logger.uiImageExt.error("Couldn't write the imageData to: \(fileUrl)")
             return nil
         }
     }
