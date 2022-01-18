@@ -21,4 +21,7 @@ extension Logger {
 
     // Log the ProfileView
     static let profileView = Logger(subsystem: subsystem, category: "ProfileView")
+
+    // Log the ProfileViewModel
+    static let profileViewModel = Logger(subsystem: subsystem, category: "ProfileViewModel")
 }
