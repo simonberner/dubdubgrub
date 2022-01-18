@@ -44,7 +44,14 @@ By not using 3rd party libraries in your project, you are going to learn more. E
 specifically want to experiment with certain libs. Be aware that someone might ask: Did you write any of this code on your own
 or did you just use libraries?
 
+## Requirements
+- An iCloud account is needed in order to use all features
+- An Apple Developer membership is required to develop on the App
+
 ## Learnings
+### Swift
+Which Swift version is the current latest? And which is currently in development? Here a great overview:
+- [Swift Version](https://swiftversion.net/)
 ### CloudKit
 CloudKit is essentially Apple's 1st party version Backend Service (similar to Google's [Firebase](https://firebase.google.com/)).
 It is available on all Apple Platforms.
@@ -83,19 +90,9 @@ a record of this type. The restriction though is, that you can't query it. That 
 #### MapKit
 - 
 #### CoreLocation
-With it we can get access to:
-- GPS
-- Wi-Fi
-- Bluetooth
-- Barometer
-- Celluar
+- With CoreLocation we can get access to: GPS, Wi-Fi, Bluetooth, Barometer, Celluar to get infos like: Location, Altitude, iBeacons, Region, Monitoring
+- The CLLocationManager delivers all the necessary location-events to an App
 
-to get infos like:
-- Location
-- Altitude
-- iBeacons
-- Region
-- Monitoring
 
 ### Async await (since Swift 5.5)
 - [Async await](https://www.avanderlee.com/swift/async-await/)
@@ -116,15 +113,36 @@ Rewatching videos after I have build and experimented with a certain framework, 
 - [We can add Subscripts to a Type](https://docs.swift.org/swift-book/LanguageGuide/Extensions.html#ID156)
 
 ### Design Patterns and Architectures
-Design patterns and architectures are guidelines for your code. You don't have to follow them at all costs!
+Design patterns and architectures are guidelines with the purpose to make your code as flexible, maintainable, testable, understandable
+and clean as possible for your context. You don't have to follow them at all costs!
 - [Swift design patterns and iOS architectures](https://theswiftdev.com/the-ultimate-viper-architecture-tutorial/)
 #### MVVM
 - Model: reflects the data layer
 - View: the view layer shows what the ViewModel is publishing
 - ViewModel: the business logic is an ObservableObject (final class) where Views can subscribe (observe) to. It connects the View with the Model
 
+### Error handling
+- [do, try, catch](https://www.hackingwithswift.com/new-syntax-swift-2-error-handling-try-catch)
+
+### GeometryReader
+Shall we use the GeometryReader for our custom views or not? I am a bit confused now from these to conflicting posts:
+- [Paul Hudson - Understanding frames and coordinates inside GeometryReader](https://www.hackingwithswift.com/books/ios-swiftui/understanding-frames-and-coordinates-inside-geometryreader)
+- [Swift with Majid - How to use GeometryReader without breaking SwiftUI layout](https://swiftwithmajid.com/2020/11/04/how-to-use-geometryreader-without-breaking-swiftui-layout/)
+
+### MainActor
+- [MainActor (since Swift 5.5) performs tasks on the main thread](https://www.avanderlee.com/swift/mainactor-dispatch-main-thread/)
+
+### Communicating with UIKit
+- In SwiftUI we use a so called 'Coordinator' to communicate with UIKit.
+- 
+
+### Holy Coding Principles
+One should not always follow [coding principle](https://www.makeuseof.com/tag/basic-programming-principles/) at all costs.
+- [DRY is good](https://thevaluable.dev/dry-principle-cost-benefit-example/) but repeating yourself a little bit can make your code easier to read and use.
+- [Dedicate individual posts for these principles](https://medium.com/swift-india/solid-principles-for-ios-developers-3f8919c78b30)
+
 ## Code comments
 For learning purposes, I have added lots of comments alongside the code. I am aware that this would propably be ommitted in 'production' code ;)
 
 ## Credits
-A big thanks to Sean Allen for an amazingly rich filled and well structured course 👏🏼
+A big thanks to Sean Allen for his amazing teaching style and a rich filled and well structured course 👏🏼
