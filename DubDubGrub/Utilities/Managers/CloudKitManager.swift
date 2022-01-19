@@ -6,9 +6,41 @@
 //
 
 import CloudKit
+import OSLog
 
-struct CloudKitManager {
-    static func getLocations(completed: @escaping (Result <[DDGLocation], Error>) -> Void) {
+final class CloudKitManager {
+
+    // CloudKitManager is a singleton
+    static let shared = CloudKitManager()
+
+    // Noone can initialize
+    private init() {}
+
+    var userRecord: CKRecord?
+
+    // this happens silently in the background
+    // (a user does not necessarely have to be logged in, if she just
+    // wants to see who is checked in at which location)
+    func getUserRecord() {
+        CKContainer.default().fetchUserRecordID { recordID, error in
+            guard let recordID = recordID, error == nil else {
+                Logger.cloudKitManager.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
+                return
+            }
+
+            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
+                guard let userRecord = userRecord, error == nil else {
+                    Logger.profileView.error("Fetching UserRecord failed: \(error!.localizedDescription)")
+                    return
+                }
+
+                self.userRecord = userRecord
+                Logger.cloudKitManager.info("getUserRecord: \(self.userRecord.debugDescription)")
+            }
+        }
+    }
+    
+    func getLocations(completed: @escaping (Result <[DDGLocation], Error>) -> Void) {
         // sort by location name
         let alphabeticalSort = NSSortDescriptor(key: DDGLocation.kName, ascending: true)
         // taking baby-steps before using CKQueryOperation:
@@ -38,5 +70,40 @@ struct CloudKitManager {
             completed(.success(locations))
         }
 
+    }
+
+    func batchSave(records: [CKRecord], completed: @escaping (Result<[CKRecord], Error>) -> Void) {
+
+        let operation = CKModifyRecordsOperation(recordsToSave: records)
+        // completion block
+        // (if it was successful we get savedRecords back or deletedRecords which we ignore here, otherwise an error)
+        operation.modifyRecordsCompletionBlock = { savedRecords, _, error in
+            guard let savedRecords = savedRecords, error == nil else {
+                Logger.profileView.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
+                completed(.failure(error!))
+                return
+            }
+
+            completed(.success(savedRecords))
+            Logger.profileView.info("Saved records to CloudKit: \(savedRecords)")
+        }
+
+        // run the operation (to save the records)
+        CKContainer.default().publicCloudDatabase.add(operation)
+
+    }
+
+    func fetchRecord(with id: CKRecord.ID, completed: @escaping (Result<CKRecord, Error>) -> Void) {
+
+        // Get the profileRecord - network call to CK
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
+            guard let record = record, error == nil else {
+                completed(.failure(error!))
+                Logger.profileView.error("Fetching profileRecord failed: \(error!.localizedDescription)")
+                return
+            }
+
+            completed(.success(record))
+        }
     }
 }

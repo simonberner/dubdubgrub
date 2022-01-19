@@ -89,11 +89,10 @@ struct ProfileView: View {
             }
             .padding(.horizontal)
 
-
             Spacer()
 
             Button {
-//                saveUserProfile()
+                viewModel.saveUserProfile()
             } label: {
                 DDGButton(title: "Create Profile")
                     .padding()

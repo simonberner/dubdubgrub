@@ -24,4 +24,7 @@ extension Logger {
 
     // Log the ProfileViewModel
     static let profileViewModel = Logger(subsystem: subsystem, category: "ProfileViewModel")
+
+    // Log the CloudKitManager
+    static let cloudKitManager = Logger(subsystem: subsystem, category: "CloudKitManager")
 }

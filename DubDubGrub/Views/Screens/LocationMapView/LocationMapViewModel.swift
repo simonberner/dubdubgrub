@@ -83,7 +83,7 @@ final class LocationMapViewModel: NSObject, ObservableObject {
 
     // @MainActor: Anything in this method will be rerouted to the main (UI) queue/thread
     @MainActor func getLocations(for locationManager: LocationManager) {
-        CloudKitManager.getLocations { [self] result in
+        CloudKitManager.shared.getLocations { [self] result in
             Task {
                 switch result {
                     // getting back an array of locations
@@ -93,7 +93,7 @@ final class LocationMapViewModel: NSObject, ObservableObject {
                 case .failure(let error):
                     alertItem = AlertContext.unableToGetLocations
                     showAlert = true
-                    Logger.locationMapViewModel.error("\(error.localizedDescription)")
+                    Logger.locationMapViewModel.error("getLocations: \(error.localizedDescription)")
                 }
             }
         }

@@ -7,6 +7,7 @@
 
 import CloudKit
 import OSLog
+import SwiftUI
 
 final class ProfileViewModel: ObservableObject {
 
@@ -41,79 +42,54 @@ final class ProfileViewModel: ObservableObject {
 
         let profileRecord = createProfileRecord()
 
-        // Get the UserRecordID from the CK Container
-        // TODO: refactor to us async userRecordID()
-        CKContainer.default().fetchUserRecordID { recordID, error in
-            guard let recordID = recordID, error == nil else {
-                Logger.profileView.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
-                return
-            }
+        guard let userRecord = CloudKitManager.shared.userRecord else {
+            // show alert
+            return
+        }
 
-            // Get the UserRecord from the CK Public Database
-            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
-                guard let userRecord = userRecord, error == nil else {
-                    Logger.profileView.error("Fetching UserRecord failed: \(error!.localizedDescription)")
-                    return
-                }
+        // create the reference userRecord (Users) to profileRecord (DDGProfile)
+        userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
 
-                // Create a reference from the userRecord to the user profileRecord
-                // action -> .deleteSelf: when the user profile gets deleted, also delete the associated profile
-                // (when the parent gets deleted, also delete (my)self)
-                userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
-
-                // Create a CKOperation to save the userRecord and profileRecord
-                let operation = CKModifyRecordsOperation(recordsToSave: [userRecord, profileRecord])
-                // completion block
-                // (if it was successful we get savedRecords back or deletedRecords which we ignore here, otherwise an error)
-                operation.modifyRecordsCompletionBlock = { savedRecords, _, error in
-                    guard let savedRecords = savedRecords, error == nil else {
-                        Logger.profileView.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
-                        return
-                    }
-
-                    Logger.profileView.info("Saved records to CloudKit: \(savedRecords)")
-                }
-
-                // run the operation (to save the records)
-                CKContainer.default().publicCloudDatabase.add(operation)
+        CloudKitManager.shared.batchSave(records: [userRecord, profileRecord]) { result in
+            switch result {
+            case .success(_):
+                // show alert
+                break
+            case .failure(_):
+                // show alert
+                break
             }
         }
     }
 
     func getProfile() {
-        // Get user recordID - network call to CK
-        CKContainer.default().fetchUserRecordID { recordID, error in
-            guard let recordID = recordID, error == nil else {
-                Logger.profileView.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
-                return
-            }
-            // Get the UserRecord from the CK Public Database - network call to CK
-            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
-                guard let userRecord = userRecord, error == nil else {
-                    Logger.profileView.error("Fetching UserRecord failed: \(error!.localizedDescription)")
-                    return
-                }
 
-                let profileReference = userRecord["userProfile"] as! CKRecord.Reference
-                let profileRecordID = profileReference.recordID
+        guard let userRecord = CloudKitManager.shared.userRecord else {
+            // show alert
+            return
+        }
 
-                // Get the profileRecord - network call to CK
-                CKContainer.default().publicCloudDatabase.fetch(withRecordID: profileRecordID) { profileRecord, error in
-                    guard let profileRecord = profileRecord, error == nil else {
-                        Logger.profileView.error("Fetching profileRecord failed: \(error!.localizedDescription)")
-                        return
-                    }
+        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else {
+            // show alert
+            return
+        }
 
-                    // Go to the main thread and create a DDGProfile from the above profileRecord
-                    // to populate the UI
-                    DispatchQueue.main.async { [self] in
-                        let profile = DDGProfile(record: profileRecord) // convert
-                        firstName = profile.firstName
-                        lastName = profile.lastName
-                        companyName = profile.companyName
-                        bio = profile.bio
-                        avatar = profile.getImage(for: .square)
-                    }
+        let profileRecordID = profileReference.recordID
+
+        CloudKitManager.shared.fetchRecord(with: profileRecordID) { result in
+            // Go to the main thread and create a DDGProfile to redraw the UI with the data
+            DispatchQueue.main.async { [self] in
+                switch result {
+                case .success(let record):
+                    let profile = DDGProfile(record: record) // convert
+                    firstName = profile.firstName
+                    lastName = profile.lastName
+                    companyName = profile.companyName
+                    bio = profile.bio
+                    avatar = profile.getImage(for: .square)
+                case .failure(_):
+                    // show alert
+                    break
                 }
             }
         }
