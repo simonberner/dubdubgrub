@@ -19,6 +19,7 @@ final class ProfileViewModel: ObservableObject {
     @Published var isShowingPhotoPicker = false
     @Published var alertItem: AlertItem?
     @Published var showAlert = false
+    @Published var isLoading = false
 
     func isValidProfile() -> Bool {
 
@@ -43,21 +44,25 @@ final class ProfileViewModel: ObservableObject {
         let profileRecord = createProfileRecord()
 
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show alert
+            alertItem = AlertContext.noUserRecord
             return
         }
 
         // create the reference userRecord (Users) to profileRecord (DDGProfile)
         userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
 
+        showLoadingView()
         CloudKitManager.shared.batchSave(records: [userRecord, profileRecord]) { result in
-            switch result {
-            case .success(_):
-                // show alert
-                break
-            case .failure(_):
-                // show alert
-                break
+            DispatchQueue.main.sync { [self] in
+                hideLoadingView()
+
+                switch result {
+                case .success(_):
+                    alertItem = AlertContext.createProfileSuccess
+                case .failure(_):
+                    alertItem = AlertContext.createProfileFailure
+                }
+
             }
         }
     }
@@ -65,20 +70,20 @@ final class ProfileViewModel: ObservableObject {
     func getProfile() {
 
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show alert
+            alertItem = AlertContext.noUserRecord
             return
         }
 
-        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else {
-            // show alert
-            return
-        }
+        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else { return }
 
         let profileRecordID = profileReference.recordID
 
+        showLoadingView()
         CloudKitManager.shared.fetchRecord(with: profileRecordID) { result in
             // Go to the main thread and create a DDGProfile to redraw the UI with the data
             DispatchQueue.main.async { [self] in
+                hideLoadingView()
+
                 switch result {
                 case .success(let record):
                     let profile = DDGProfile(record: record) // convert
@@ -88,7 +93,7 @@ final class ProfileViewModel: ObservableObject {
                     bio = profile.bio
                     avatar = profile.getImage(for: .square)
                 case .failure(_):
-                    // show alert
+                    alertItem = AlertContext.unableToGetProfile
                     break
                 }
             }
@@ -106,4 +111,8 @@ final class ProfileViewModel: ObservableObject {
 
         return profileRecord
     }
+
+    // Helper functions
+    private func showLoadingView() { isLoading = true }
+    private func hideLoadingView() { isLoading = false }
 }

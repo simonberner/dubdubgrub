@@ -22,82 +22,85 @@ struct ProfileView: View {
 
     var body: some View {
 
-        VStack {
-            GroupBox {
-                HStack(spacing: 16) {
-                    ZStack {
-                        AvatarView(image: viewModel.avatar, size: 80)
-                        EditImage()
-                    }
-                    .onTapGesture {
-                        viewModel.isShowingPhotoPicker = true
-                    }
+        ZStack{
+            VStack {
+                GroupBox {
+                    HStack(spacing: 16) {
+                        ZStack {
+                            AvatarView(image: viewModel.avatar, size: 80)
+                            EditImage()
+                        }
+                        .onTapGesture {
+                            viewModel.isShowingPhotoPicker = true
+                        }
 
-                    VStack(spacing: 1) {
-                        TextField("First Name", text: $viewModel.firstName)
-                            .profileNameStyle()
-                            .focused($focusedTextField, equals: .firstname)
-                            .onSubmit { focusedTextField = .lastname }
-                            .submitLabel(.next)
+                        VStack(spacing: 1) {
+                            TextField("First Name", text: $viewModel.firstName)
+                                .profileNameStyle()
+                                .focused($focusedTextField, equals: .firstname)
+                                .onSubmit { focusedTextField = .lastname }
+                                .submitLabel(.next)
 
-                        TextField("Last Name", text: $viewModel.lastName)
-                            .profileNameStyle()
-                            .focused($focusedTextField, equals: .lastname)
-                            .onSubmit { focusedTextField = .companyName }
-                            .submitLabel(.next)
+                            TextField("Last Name", text: $viewModel.lastName)
+                                .profileNameStyle()
+                                .focused($focusedTextField, equals: .lastname)
+                                .onSubmit { focusedTextField = .companyName }
+                                .submitLabel(.next)
 
-                        TextField("Company Name", text: $viewModel.companyName)
-                            .focused($focusedTextField, equals: .companyName)
-                            .onSubmit { focusedTextField = .bio }
-                            .submitLabel(.next)
-                    }
-                    .focused($dismissKeyboard)
-                    .padding(.trailing, 16)
+                            TextField("Company Name", text: $viewModel.companyName)
+                                .focused($focusedTextField, equals: .companyName)
+                                .onSubmit { focusedTextField = .bio }
+                                .submitLabel(.next)
+                        }
+                        .focused($dismissKeyboard)
+                        .padding(.trailing, 16)
 
-                    Spacer()
-                }
-            }
-            .cornerRadius(12)
-            .padding(.horizontal)
-
-            VStack(alignment: .leading, spacing: 8) {
-                
-                HStack {
-                    CharacterRemainView(currentCount: viewModel.bio.count)
-
-                    Spacer()
-
-                    Button {
-
-                    } label: {
-                        Label("Check Out", systemImage: "mappin.and.ellipse")
-                            .font(.callout)
-                            .frame(width: 125, height: 30)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                        Spacer()
                     }
                 }
+                .cornerRadius(12)
+                .padding(.horizontal)
 
-                // Bio Text - 100 characters limited
-                TextEditor(text: $viewModel.bio)
-                    .frame(height: 100)
-                    .overlay(RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.secondary, lineWidth: 1))
-                    .focused($focusedTextField, equals: .bio)
-                    .focused($dismissKeyboard)
+                VStack(alignment: .leading, spacing: 8) {
+
+                    HStack {
+                        CharacterRemainView(currentCount: viewModel.bio.count)
+
+                        Spacer()
+
+                        Button {
+
+                        } label: {
+                            Label("Check Out", systemImage: "mappin.and.ellipse")
+                                .font(.callout)
+                                .frame(width: 125, height: 30)
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                    }
+
+                    // Bio Text - 100 characters limited
+                    TextEditor(text: $viewModel.bio)
+                        .frame(height: 100)
+                        .overlay(RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.secondary, lineWidth: 1))
+                        .focused($focusedTextField, equals: .bio)
+                        .focused($dismissKeyboard)
+                }
+                .padding(.horizontal)
+
+                Spacer()
+
+                Button {
+                    viewModel.saveUserProfile()
+                } label: {
+                    DDGButton(title: "Create Profile")
+                        .padding()
+                }
             }
-            .padding(.horizontal)
 
-            Spacer()
-
-            Button {
-                viewModel.saveUserProfile()
-            } label: {
-                DDGButton(title: "Create Profile")
-                    .padding()
-            }
-
+            if viewModel.isLoading {LoadingView()}
         }
         .navigationTitle("Profile")
         .toolbar {

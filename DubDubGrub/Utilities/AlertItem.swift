@@ -31,8 +31,24 @@ struct AlertContext {
                                                 message: "Your phone's location services are disabled. To change that go to your phone's Settings > Privacy > Location Services",
                                                 buttonText: "OK")
 
-    //MARK: - ProfileView Errors
+    //MARK: - ProfileViewModel Errors
     static let invalidProfileForm = AlertItem(title: "Invalid Profile",
                                                 message: "Profile photo and all fields are required. Your Bio must be <=100 characters.\nCheck and try again",
+                                                buttonText: "OK")
+
+    static let noUserRecord = AlertItem(title: "No User Record",
+                                                message: "You must log into iCloud on your phone in order to use Dub Dub Grub Profile. Please log in.",
+                                                buttonText: "OK")
+
+    static let createProfileSuccess = AlertItem(title: "Profile Created Successfully!",
+                                                message: "Your profile has successfully been created.",
+                                                buttonText: "OK")
+
+    static let createProfileFailure = AlertItem(title: "Failed to Create Profile!",
+                                                message: "We were unable to create your profile at this time.\n Please try again later.",
+                                                buttonText: "OK")
+
+    static let unableToGetProfile = AlertItem(title: "Unable To Get Your profile!",
+                                                message: "We were unable to get your profile at this time.\n Please try again later.",
                                                 buttonText: "OK")
 }
