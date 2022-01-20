@@ -18,6 +18,7 @@
 		1554BA22277E3C90006FB3C9 /* DDGLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1554BA21277E3C90006FB3C9 /* DDGLocation.swift */; };
 		155808E3279497D8007443A6 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155808E2279497D8007443A6 /* UIImage+Ext.swift */; };
 		1567F94327996F440020C7C8 /* ProfileContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1567F94227996F440020C7C8 /* ProfileContext.swift */; };
+		1567F9462799B1550020C7C8 /* LocationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */; };
 		158E240727975CF6000DEC3F /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158E240627975CF6000DEC3F /* ProfileViewModel.swift */; };
 		1596BE64278C6D3D0001D2BE /* CKAsset+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */; };
 		159B6B8A278F3E5B007A4912 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B6B89278F3E5B007A4912 /* OnboardView.swift */; };
@@ -75,6 +76,7 @@
 		1554BA21277E3C90006FB3C9 /* DDGLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGLocation.swift; sourceTree = "<group>"; };
 		155808E2279497D8007443A6 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		1567F94227996F440020C7C8 /* ProfileContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileContext.swift; sourceTree = "<group>"; };
+		1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
 		158E240627975CF6000DEC3F /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
 		159B6B89278F3E5B007A4912 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
@@ -160,10 +162,10 @@
 		152F3E32277BB0F20074D2B1 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				1567F9442799B13D0020C7C8 /* LocationDetailView */,
 				158E240527975CE1000DEC3F /* ProfileView */,
 				15DB7C4327860D1800BEC16F /* LocationMapView */,
 				15FB054D2770D6710036A003 /* AppTabView.swift */,
-				15175F192772778400CD6A30 /* LocationDetailView.swift */,
 				15FB05522770D7310036A003 /* LocationListView.swift */,
 				159B6B89278F3E5B007A4912 /* OnboardView.swift */,
 			);
@@ -189,6 +191,15 @@
 				15C684C0277F657700067C4E /* MockData.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		1567F9442799B13D0020C7C8 /* LocationDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				15175F192772778400CD6A30 /* LocationDetailView.swift */,
+				1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */,
+			);
+			path = LocationDetailView;
 			sourceTree = "<group>";
 		};
 		158E240527975CE1000DEC3F /* ProfileView */ = {
@@ -478,6 +489,7 @@
 				1554BA22277E3C90006FB3C9 /* DDGLocation.swift in Sources */,
 				15175F162771CD2800CD6A30 /* LocationListCell.swift in Sources */,
 				15FB054E2770D6710036A003 /* AppTabView.swift in Sources */,
+				1567F9462799B1550020C7C8 /* LocationDetailViewModel.swift in Sources */,
 				154C120B2782F6370015B7E4 /* Logger+Ext.swift in Sources */,
 				15D325A92780E8490007FD17 /* CloudKitManager.swift in Sources */,
 				15A046E12787837000C086A0 /* LocationManager.swift in Sources */,

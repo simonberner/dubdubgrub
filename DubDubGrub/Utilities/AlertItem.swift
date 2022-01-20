@@ -31,7 +31,7 @@ struct AlertContext {
                                                 message: "Your phone's location services are disabled. To change that go to your phone's Settings > Privacy > Location Services",
                                                 buttonText: "OK")
 
-    //MARK: - ProfileViewModel Errors
+    //MARK: - ProfileView Errors
     static let invalidProfileForm = AlertItem(title: "Invalid Profile ⚠️",
                                                 message: "Profile photo and all fields are required. Your Bio must be <=100 characters.\nCheck and try again",
                                                 buttonText: "OK")
@@ -58,5 +58,10 @@ struct AlertContext {
 
     static let updateProfileFailure = AlertItem(title: "Profile Updated Failed ⚠️",
                                                 message: "We were unable to update your profile this time.\n Please try again later.",
+                                                buttonText: "OK")
+
+    //MARK: - LocationDetailView Errors
+    static let invalidPhoneNumber = AlertItem(title: "Invalid Phone Number ⚠️",
+                                                message: "The phone number for the location is invalid. Please look up the phone number yourself.",
                                                 buttonText: "OK")
 }

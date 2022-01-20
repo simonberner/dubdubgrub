@@ -9,38 +9,38 @@ import SwiftUI
 
 struct LocationDetailView: View {
 
-    // TODO: refactor this into a view model
-    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-
-    var location: DDGLocation
+    // @ObservedObject: to tell SwiftUI we want to watch the object for changes
+    // but don’t own it directly. -> The object is passed in from the LocationListView!
+    // (https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject)
+    @ObservedObject var viewModel: LocationDetailViewModel
 
     var body: some View {
         VStack(spacing: 16) {
-            BannerImageView(image: location.getImage(for: .banner))
+            BannerImageView(image: viewModel.location.getImage(for: .banner))
 
             HStack {
-                AddressView(address: location.address)
+                AddressView(address: viewModel.location.address)
                 
                 Spacer()
             }
             .padding(.horizontal)
 
-            DescriptionView(text: location.description)
+            DescriptionView(text: viewModel.location.description)
 
             GroupBox {
                 HStack(spacing: 20) {
                     Button {
-
+                        viewModel.getDirectionsToLocation()
                     } label: {
                         LocationActionButton(color: .brandPrimary, imageName: "location.fill")
                     }
 
-                    Link(destination: URL(string: location.websiteURL)!, label: {
+                    Link(destination: URL(string: viewModel.location.websiteURL)!, label: {
                         LocationActionButton(color: .brandPrimary, imageName: "network")
                     })
 
                     Button {
-
+                        viewModel.callLocation()
                     } label: {
                         LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
                     }
@@ -63,7 +63,7 @@ struct LocationDetailView: View {
 
             ScrollView {
                 // only 10 views can be placed in the grid
-                LazyVGrid(columns: columns, content: {
+                LazyVGrid(columns: viewModel.columns, content: {
                     FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
                     FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
                     FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
@@ -78,7 +78,13 @@ struct LocationDetailView: View {
             }
             Spacer()
         }
-        .navigationTitle(location.name)
+        .alert(Text(viewModel.alertItem?.title ?? ""),
+               isPresented: $viewModel.showAlert) {
+            Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
+                  } message: {
+                      Text(viewModel.alertItem?.message ?? "")
+                  }
+        .navigationTitle(viewModel.location.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -161,7 +167,7 @@ struct LocationDetailView_Previews: PreviewProvider {
     static var previews: some View {
         // Tip: Put the Preview into a NavigationView to see how it looks like
         NavigationView {
-            LocationDetailView(location: DDGLocation(record: MockData.location))
+            LocationDetailView(viewModel: LocationDetailViewModel(location: DDGLocation(record: MockData.location)))
         }
     }
 }
