@@ -7,6 +7,7 @@
 
 import CloudKit
 import OSLog
+import UIKit
 
 final class CloudKitManager {
 
@@ -72,6 +73,7 @@ final class CloudKitManager {
 
     }
 
+    // save/update an Array of CKRecords
     func batchSave(records: [CKRecord], completed: @escaping (Result<[CKRecord], Error>) -> Void) {
 
         let operation = CKModifyRecordsOperation(recordsToSave: records)
@@ -91,6 +93,19 @@ final class CloudKitManager {
         // run the operation (to save the records)
         CKContainer.default().publicCloudDatabase.add(operation)
 
+    }
+
+    // save/update a single CKRecord
+    func save(record: CKRecord, completed: @escaping (Result<CKRecord, Error>) -> Void) {
+        CKContainer.default().publicCloudDatabase.save(record) { record, error in
+            guard let record = record, error == nil else {
+                completed(.failure(error!))
+                Logger.profileView.error("Fetching profileRecord failed: \(error!.localizedDescription)")
+                return
+            }
+
+            completed(.success(record))
+        }
     }
 
     func fetchRecord(with id: CKRecord.ID, completed: @escaping (Result<CKRecord, Error>) -> Void) {

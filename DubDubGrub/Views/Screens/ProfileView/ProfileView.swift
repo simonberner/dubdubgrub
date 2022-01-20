@@ -93,9 +93,9 @@ struct ProfileView: View {
                 Spacer()
 
                 Button {
-                    viewModel.saveUserProfile()
+                    viewModel.profileContext == .create ? viewModel.createUserProfile() : viewModel.updateProfile()
                 } label: {
-                    DDGButton(title: "Create Profile")
+                    DDGButton(title: viewModel.profileContext == .create ? "Create Profile" : "Update Profile")
                         .padding()
                 }
             }
@@ -117,6 +117,9 @@ struct ProfileView: View {
             }
         }
         .onAppear(perform: {
+            // We call this func everytime the Profile view is tapped. This is good enough for an MVP
+            // and we don't go any deeper down the rabbit hole do find a better solution (eg. a CK
+            // subscription to the profile data)
             viewModel.getProfile()
         })
         .alert(Text(viewModel.alertItem?.title ?? ""),

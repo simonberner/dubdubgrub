@@ -21,6 +21,11 @@ final class ProfileViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var isLoading = false
 
+    private var existingProfileRecord: CKRecord? {
+        didSet { profileContext = .update }
+    }
+    var profileContext: ProfileContext = .create
+
     func isValidProfile() -> Bool {
 
         guard !firstName.isEmpty,
@@ -33,7 +38,7 @@ final class ProfileViewModel: ObservableObject {
         return true
     }
 
-    func saveUserProfile() {
+    func createUserProfile() {
         // Have we a valid profile?
         guard isValidProfile() else {
             showAlert = true
@@ -44,6 +49,7 @@ final class ProfileViewModel: ObservableObject {
         let profileRecord = createProfileRecord()
 
         guard let userRecord = CloudKitManager.shared.userRecord else {
+            showAlert = true
             alertItem = AlertContext.noUserRecord
             return
         }
@@ -57,9 +63,14 @@ final class ProfileViewModel: ObservableObject {
                 hideLoadingView()
 
                 switch result {
-                case .success(_):
+                case .success(let records):
+                    for record in records where record.recordType == RecordType.profile {
+                        existingProfileRecord = record
+                    }
+                    showAlert = true
                     alertItem = AlertContext.createProfileSuccess
                 case .failure(_):
+                    showAlert = true
                     alertItem = AlertContext.createProfileFailure
                 }
 
@@ -67,9 +78,49 @@ final class ProfileViewModel: ObservableObject {
         }
     }
 
+    // Update the already exiting profileRecord
+    func updateProfile() {
+        guard isValidProfile() else {
+            showAlert = true
+            alertItem = AlertContext.invalidProfileForm
+            return
+        }
+
+        guard let profileRecord = existingProfileRecord else {
+            showAlert = true
+            alertItem = AlertContext.unableToGetProfile
+            return
+        }
+
+        // The CK backend is smart enough to only update the fields which
+        // actually have new values
+        profileRecord[DDGProfile.kFirstName] = firstName
+        profileRecord[DDGProfile.kLastName] = lastName
+        profileRecord[DDGProfile.kCompanyName] = companyName
+        profileRecord[DDGProfile.kBio] = bio
+        profileRecord[DDGProfile.kAvatar] = avatar.convertToCKAsset()
+
+        showLoadingView()
+        CloudKitManager.shared.save(record: profileRecord) { result in
+            // UI updates have to be on the main thread
+            DispatchQueue.main.async { [self] in
+                hideLoadingView()
+                switch result {
+                case .success(_):
+                    showAlert = true
+                    alertItem = AlertContext.updateProfileSuccess
+                case .failure(_):
+                    showAlert = true
+                    alertItem = AlertContext.updateProfileFailure
+                }
+            }
+        }
+    }
+
     func getProfile() {
 
         guard let userRecord = CloudKitManager.shared.userRecord else {
+            showAlert = true
             alertItem = AlertContext.noUserRecord
             return
         }
@@ -86,15 +137,18 @@ final class ProfileViewModel: ObservableObject {
 
                 switch result {
                 case .success(let record):
+                    existingProfileRecord = record
+
                     let profile = DDGProfile(record: record) // convert
                     firstName = profile.firstName
                     lastName = profile.lastName
                     companyName = profile.companyName
                     bio = profile.bio
                     avatar = profile.getImage(for: .square)
-                case .failure(_):
+                case .failure(let error):
+                    showAlert = true
                     alertItem = AlertContext.unableToGetProfile
-                    break
+                    Logger.profileViewModel.info("Could not get the profile: \(error.localizedDescription)")
                 }
             }
         }
