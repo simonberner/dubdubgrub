@@ -15,68 +15,70 @@ struct LocationDetailView: View {
     @ObservedObject var viewModel: LocationDetailViewModel
 
     var body: some View {
-        VStack(spacing: 16) {
-            BannerImageView(image: viewModel.location.getImage(for: .banner))
+        ZStack {
+            VStack(spacing: 16) {
+                BannerImageView(image: viewModel.location.getImage(for: .banner))
 
-            HStack {
-                AddressView(address: viewModel.location.address)
-                
+                HStack {
+                    AddressView(address: viewModel.location.address)
+
+                    Spacer()
+                }
+                .padding(.horizontal)
+
+                DescriptionView(text: viewModel.location.description)
+
+                GroupBox {
+                    HStack(spacing: 20) {
+                        Button {
+                            viewModel.getDirectionsToLocation()
+                        } label: {
+                            LocationActionButton(color: .brandPrimary, imageName: "location.fill")
+                        }
+
+                        Link(destination: URL(string: viewModel.location.websiteURL)!, label: {
+                            LocationActionButton(color: .brandPrimary, imageName: "network")
+                        })
+
+                        Button {
+                            viewModel.callLocation()
+                        } label: {
+                            LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
+                        }
+
+                        Button {
+
+                        } label: {
+                            LocationActionButton(color: .brandPrimary, imageName: "person.fill.xmark")
+                        }
+                    }
+
+                }
+                .foregroundColor(Color(uiColor: .secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 60, style: .continuous))
+                .padding(.horizontal)
+
+                Text("Who's here?")
+                    .bold()
+                    .font(.title2)
+
+                ScrollView {
+                    // only 10 views can be placed in the grid
+                    LazyVGrid(columns: viewModel.columns, content: {
+                        FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
+                            .onTapGesture {
+                                withAnimation(.easeIn(duration: 0.5)) {
+                                    viewModel.isShowingProfileModalView = true
+                                }
+                            }
+                    })
+                }
                 Spacer()
             }
-            .padding(.horizontal)
-
-            DescriptionView(text: viewModel.location.description)
-
-            GroupBox {
-                HStack(spacing: 20) {
-                    Button {
-                        viewModel.getDirectionsToLocation()
-                    } label: {
-                        LocationActionButton(color: .brandPrimary, imageName: "location.fill")
-                    }
-
-                    Link(destination: URL(string: viewModel.location.websiteURL)!, label: {
-                        LocationActionButton(color: .brandPrimary, imageName: "network")
-                    })
-
-                    Button {
-                        viewModel.callLocation()
-                    } label: {
-                        LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
-                    }
-
-                    Button {
-
-                    } label: {
-                        LocationActionButton(color: .brandPrimary, imageName: "person.fill.xmark")
-                    }
-                }
-
+            if viewModel.isShowingProfileModalView {
+                ProfileModalView(isShowingProfileModalView: $viewModel.isShowingProfileModalView, profile: DDGProfile(record: MockData.profile))
+                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
-            .foregroundColor(Color(uiColor: .secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 60, style: .continuous))
-            .padding(.horizontal)
-
-            Text("Who's here?")
-                .bold()
-                .font(.title2)
-
-            ScrollView {
-                // only 10 views can be placed in the grid
-                LazyVGrid(columns: viewModel.columns, content: {
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                    FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                })
-            }
-            Spacer()
         }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {

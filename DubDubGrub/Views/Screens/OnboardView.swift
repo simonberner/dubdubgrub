@@ -35,7 +35,7 @@ struct OnboardView: View {
             .frame(width: proxy.size.width, height: proxy.size.height)
             .cornerRadius(20)
             .background(Color(.systemBackground))
-            .overlay(DismissButton(isShowingOnboardView: $isShowingOnboardView), alignment: .topTrailing)
+            .overlay(DismissButton(isShowingView: $isShowingOnboardView), alignment: .topTrailing)
         }
     }
 }
