@@ -44,6 +44,8 @@ struct DDGProfile {
             return avatar?.convertToUIImage(in: dimension) ?? placeholder
         case .banner:
             return avatar?.convertToUIImage(in: dimension) ?? placeholder
+        case .avatar:
+            return avatar?.convertToUIImage(in: dimension) ?? placeholder
         }
     }
 

@@ -53,6 +53,8 @@ struct DDGLocation: Identifiable {
             return squareAsset?.convertToUIImage(in: dimension) ?? placeholder
         case .banner:
             return bannerAsset?.convertToUIImage(in: dimension) ?? placeholder
+        case .avatar:
+            return placeholder // because there is not avatarAsset
         }
     }
 

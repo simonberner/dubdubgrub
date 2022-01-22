@@ -67,7 +67,7 @@ struct LocationDetailView: View {
                     LazyVGrid(columns: viewModel.columns, content: {
                         FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
                             .onTapGesture {
-                                withAnimation(.easeIn(duration: 0.5)) {
+                                withAnimation(.easeOut(duration: 0.5)) {
                                     viewModel.isShowingProfileModalView = true
                                 }
                             }
@@ -76,8 +76,16 @@ struct LocationDetailView: View {
                 Spacer()
             }
             if viewModel.isShowingProfileModalView {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+                    .opacity(0.1)
+//                    .transition(.opacity)
+//                    .transition(AnyTransition.opacity.animation(.easeOut(duration: 0.35)))
+                    .zIndex(1)
+
                 ProfileModalView(isShowingProfileModalView: $viewModel.isShowingProfileModalView, profile: DDGProfile(record: MockData.profile))
-                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
+                    .transition(.opacity.combined(with: .scale))
+                    .zIndex(2)
             }
         }
         .alert(Text(viewModel.alertItem?.title ?? ""),

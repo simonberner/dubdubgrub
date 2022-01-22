@@ -23,7 +23,7 @@ enum PlaceholderImage {
 }
 
 enum ImageDimension {
-    case square, banner
+    case square, banner, avatar
 
     // using a computed property on self, instead of the static func and passing in the dimension
     var placeholderImage: UIImage {
@@ -32,6 +32,8 @@ enum ImageDimension {
             return PlaceholderImage.square
         case .banner:
             return PlaceholderImage.banner
+        case .avatar:
+            return PlaceholderImage.avatar
         }
     }
 

@@ -13,9 +13,7 @@ struct DismissButton: View {
 
     var body: some View {
         Button {
-            withAnimation(.easeOut(duration: 0.5)) {
-                isShowingView = false
-            }
+            withAnimation(.easeOut(duration: 0.5)) { isShowingView = false }
         } label: {
             Image(systemName: "xmark.circle.fill")
                 .foregroundColor(.brandPrimary)

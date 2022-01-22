@@ -200,6 +200,7 @@
 			children = (
 				1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */,
 				15175F192772778400CD6A30 /* LocationDetailView.swift */,
+				1567F947279A012A0020C7C8 /* ProfileModalView.swift */,
 			);
 			path = LocationDetailView;
 			sourceTree = "<group>";
@@ -209,7 +210,6 @@
 			children = (
 				158E240627975CF6000DEC3F /* ProfileViewModel.swift */,
 				15FB05542770D7410036A003 /* ProfileView.swift */,
-				1567F947279A012A0020C7C8 /* ProfileModalView.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";

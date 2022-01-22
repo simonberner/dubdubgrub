@@ -15,7 +15,7 @@ struct AvatarView: View {
     var body: some View {
         Image(uiImage: image)
             .resizable()
-            .scaledToFit()
+            .scaledToFill()
             .frame(width: size, height: size)
             .clipShape(Circle())
     }
