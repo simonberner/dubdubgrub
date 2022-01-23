@@ -1,4 +1,4 @@
-# Dub Dub Grub - WORK IN PROGRESS - 2022
+# Dub Dub Grub - 2022 - WORK IN PROGRESS
 Dub Dub Grub (a course by Sean Allen) is my current work in progress project for taking the next (more advanced) steps in learning Swift and SwiftUI.
 It is also an exploration of the frameworks *CloudKit* and *MapKit*.
 
@@ -16,6 +16,11 @@ Apple World Wide Developer Conference or “WWDC” for short. People commonly c
 Therefore: “Dub Dub Grub”
 
 (Siri pronounces WWDC as "dub-dub-dee-see")
+
+## Notes
+Dub Dub Grub is from a functional perspective a pretty big App. So far I have invested tons of hours to build it and trying to understand what
+exactly happens with each line of code I am writing. I am on the same side as Sean: first build it and make it work, and then in a next (or later step)
+refactor it to make the code pretty 😁
 
 ## Screens
 Coming soon...
@@ -45,8 +50,11 @@ specifically want to experiment with certain libs. Be aware that someone might a
 or did you just use libraries?
 
 ## Requirements
-- An iCloud account is needed in order to use all features
+### Using the App
+- An iCloud account is needed in order to use all the features
+### Development
 - An Apple Developer membership is required to develop on the App
+- If you want to build your own Dub Dub Grub App based on this repo, be aware of that you have to configure/create your own iCloud DubDubGrub container!
 
 ## Learnings
 ### Swift
@@ -93,7 +101,6 @@ a record of this type. The restriction though is, that you can't query it. That 
 - With CoreLocation we can get access to: GPS, Wi-Fi, Bluetooth, Barometer, Celluar to get infos like: Location, Altitude, iBeacons, Region, Monitoring
 - The CLLocationManager delivers all the necessary location-events to an App
 
-
 ### Async await (since Swift 5.5)
 - [Async await](https://www.avanderlee.com/swift/async-await/)
 - [@MainActor](https://www.avanderlee.com/swift/mainactor-dispatch-main-thread/)
@@ -120,6 +127,12 @@ and clean as possible for your context. You don't have to follow them at all cos
 - Model: reflects the data layer
 - View: the view layer shows what the ViewModel is publishing
 - ViewModel: the business logic is an ObservableObject (final class) where Views can subscribe (observe) to. It connects the View with the Model
+#### Singleton
+- Can be seen as a global variable
+- Everyone has access to the same instance
+- Very easy to use
+- Be aware, that it can be dangerous, because it is hard to debug as it can be accessed and changed from anyone!
+- Use them strategically
 
 ### Error handling
 - [do, try, catch](https://www.hackingwithswift.com/new-syntax-swift-2-error-handling-try-catch)
@@ -134,15 +147,23 @@ Shall we use the GeometryReader for our custom views or not? I am a bit confused
 
 ### Communicating with UIKit
 - In SwiftUI we use a so called 'Coordinator' to communicate with UIKit.
-- 
+
+### Struct vs Class
+- A Struct (value type) is a disposable. It does not persist anything. We us it and then get rid of it.
+- A Class is for keeping an instance alive (persisting objects for an entire session).
 
 ### Holy Coding Principles
 One should not always follow [coding principle](https://www.makeuseof.com/tag/basic-programming-principles/) at all costs.
 - [DRY is good](https://thevaluable.dev/dry-principle-cost-benefit-example/) but repeating yourself a little bit can make your code easier to read and use.
 - [Dedicate individual posts for these principles](https://medium.com/swift-india/solid-principles-for-ios-developers-3f8919c78b30)
 
+### Crashing an App
+- Never letting an App crash, might not be the best idea in certain situations
+- There are situations, eg. when the App gets into a funky weird state where it should never be in, where it is ok to let the App crash,
+rather than trying to gracefully handle the error and continue on. It is best to let go and restart fresh.
+
 ## Code comments
-For learning purposes, I have added lots of comments alongside the code. I am aware that this would propably be ommitted in 'production' code ;)
+For learning purposes, I have added lots of comments alongside the code. I am aware that this would propably be ommitted at that extent in 'production' code 😉
 
 ## Credits
 A big thanks to Sean Allen for his amazing teaching style and a rich filled and well structured course 👏🏼
