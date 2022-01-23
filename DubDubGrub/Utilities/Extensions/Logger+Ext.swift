@@ -27,4 +27,7 @@ extension Logger {
 
     // Log the CloudKitManager
     static let cloudKitManager = Logger(subsystem: subsystem, category: "CloudKitManager")
+
+    // Log the LocationDetailViewModel
+    static let locationDetailViewModel = Logger(subsystem: subsystem, category: "LocationDetailViewModel")
 }

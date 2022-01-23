@@ -12,15 +12,18 @@ import UIKit
 final class CloudKitManager {
 
     // CloudKitManager is a singleton
+    // (Be aware of that this might be a slippery slope for the future when the app grows and we add
+    // more and more stuff to the CloudKitManager. The ProfileViewModal already updates the profileRecordID of this instance!)
     static let shared = CloudKitManager()
 
     // Noone can initialize
     private init() {}
 
     var userRecord: CKRecord?
+    var profileRecordID: CKRecord.ID?
 
-    // this happens silently in the background
-    // (a user does not necessarely have to be logged in, if she just
+    // this happens silently in the background on launch of the App
+    // (a user does not necesseraly have to be logged in, if she just
     // wants to see who is checked in at which location)
     func getUserRecord() {
         CKContainer.default().fetchUserRecordID { recordID, error in
@@ -37,6 +40,11 @@ final class CloudKitManager {
 
                 self.userRecord = userRecord
                 Logger.cloudKitManager.info("getUserRecord: \(self.userRecord.debugDescription)")
+
+                // Does the userRecord has a reference to a userProfile?
+                if let profileReference = userRecord["userProfile"] as? CKRecord.Reference {
+                    self.profileRecordID = profileReference.recordID // is nil when a user isn't logged in (in iCloud)
+                }
             }
         }
     }
