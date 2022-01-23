@@ -9,7 +9,7 @@ import CloudKit
 import UIKit
 
 // Object which maps to the DDGProfile CloudKit Record Type
-struct DDGProfile {
+struct DDGProfile: Identifiable {
 
     static let kFirstName = "firstName"
     static let kLastName = "lastName"
@@ -18,7 +18,7 @@ struct DDGProfile {
     static let kBio = "bio"
     static let kIsCheckedIn = "isCheckedIn"
 
-    let ckRecordId: CKRecord.ID
+    let id: CKRecord.ID
     let firstName: String
     let lastName: String
     let avatar: CKAsset! //implicitly unwrapping of the optional (handling the nil case later on with a default image asset)
@@ -28,7 +28,7 @@ struct DDGProfile {
 
     // creating our own initializer because we get a CKRecord back when querying CloudKit database
     init(record: CKRecord) {
-        ckRecordId = record.recordID
+        id = record.recordID
         firstName = record[DDGProfile.kFirstName] as? String ?? "N/A" // record is a key-value pair
         lastName = record[DDGProfile.kLastName] as? String ?? "N/A"
         avatar = record[DDGProfile.kAvatar] as? CKAsset

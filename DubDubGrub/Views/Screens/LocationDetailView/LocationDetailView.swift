@@ -8,26 +8,26 @@
 import SwiftUI
 
 struct LocationDetailView: View {
-
+    
     // @ObservedObject: to tell SwiftUI we want to watch the object for changes
     // but don’t own it directly. -> The object is passed in from the LocationListView!
     // (https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject)
     @ObservedObject var viewModel: LocationDetailViewModel
-
+    
     var body: some View {
         ZStack {
             VStack(spacing: 16) {
                 BannerImageView(image: viewModel.location.getImage(for: .banner))
-
+                
                 HStack {
                     AddressView(address: viewModel.location.address)
-
+                    
                     Spacer()
                 }
                 .padding(.horizontal)
-
+                
                 DescriptionView(text: viewModel.location.description)
-
+                
                 GroupBox {
                     HStack(spacing: 20) {
                         Button {
@@ -35,43 +35,43 @@ struct LocationDetailView: View {
                         } label: {
                             LocationActionButton(color: .brandPrimary, imageName: "location.fill")
                         }
-
+                        
                         Link(destination: URL(string: viewModel.location.websiteURL)!, label: {
                             LocationActionButton(color: .brandPrimary, imageName: "network")
                         })
-
+                        
                         Button {
                             viewModel.callLocation()
                         } label: {
                             LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
                         }
-
+                        
                         Button {
-                            // hardcoded for the moment!
-                            viewModel.updateCheckInStatus(to: .checkedIn)
+                            viewModel.updateCheckInStatus(to: viewModel.isCheckedIn ? .checkedOut : .checkedIn)
                         } label: {
                             LocationActionButton(color: .brandPrimary, imageName: "person.fill.xmark")
                         }
                     }
-
                 }
                 .foregroundColor(Color(uiColor: .secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 60, style: .continuous))
                 .padding(.horizontal)
-
+                
                 Text("Who's here?")
                     .bold()
                     .font(.title2)
-
+                
                 ScrollView {
                     // only 10 views can be placed in the grid
                     LazyVGrid(columns: viewModel.columns, content: {
-                        FirstNameAvatarView(image: PlaceholderImage.avatar, firstName: "Simon")
-                            .onTapGesture {
-                                withAnimation(.easeOut(duration: 0.5)) {
-                                    viewModel.isShowingProfileModalView = true
+                        ForEach(viewModel.checkedInProfiles) { profile in
+                            FirstNameAvatarView(profile: profile)
+                                .onTapGesture {
+                                    withAnimation(.easeOut(duration: 0.5)) {
+                                        viewModel.isShowingProfileModalView = true
+                                    }
                                 }
-                            }
+                        }
                     })
                 }
                 Spacer()
@@ -80,21 +80,22 @@ struct LocationDetailView: View {
                 Color(.systemBackground)
                     .ignoresSafeArea()
                     .opacity(0.1)
-//                    .transition(.opacity)
-//                    .transition(AnyTransition.opacity.animation(.easeOut(duration: 0.35)))
+                //                    .transition(.opacity)
+                //                    .transition(AnyTransition.opacity.animation(.easeOut(duration: 0.35)))
                     .zIndex(1)
-
+                
                 ProfileModalView(isShowingProfileModalView: $viewModel.isShowingProfileModalView, profile: DDGProfile(record: MockData.profile))
                     .transition(.opacity.combined(with: .scale))
                     .zIndex(2)
             }
         }
+        .onAppear { viewModel.getCheckedInProfiles() }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
             Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
-                  } message: {
-                      Text(viewModel.alertItem?.message ?? "")
-                  }
+        } message: {
+            Text(viewModel.alertItem?.message ?? "")
+        }
         .navigationTitle(viewModel.location.name)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -103,10 +104,10 @@ struct LocationDetailView: View {
 // as long this button is only used inside this view, it
 // can stay here
 struct LocationActionButton: View {
-
+    
     var color: Color
     var imageName: String
-
+    
     var body: some View {
         ZStack {
             Circle()
@@ -122,15 +123,14 @@ struct LocationActionButton: View {
 }
 
 struct FirstNameAvatarView: View {
-
-    var image: UIImage
-    var firstName: String
-
+    
+    var profile: DDGProfile
+    
     var body: some View {
         VStack {
-            AvatarView(image: image, size: 64)
-
-            Text(firstName)
+            AvatarView(image: profile.getImage(for: .avatar), size: 64)
+            
+            Text(profile.firstName)
                 .bold()
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
@@ -139,9 +139,9 @@ struct FirstNameAvatarView: View {
 }
 
 struct BannerImageView: View {
-
+    
     var image: UIImage
-
+    
     var body: some View {
         Image(uiImage: image)
             .resizable()
@@ -151,9 +151,9 @@ struct BannerImageView: View {
 }
 
 struct AddressView: View {
-
+    
     var address: String
-
+    
     var body: some View {
         Label(address, systemImage: "mappin.and.ellipse")
             .font(.caption)
@@ -162,9 +162,9 @@ struct AddressView: View {
 }
 
 struct DescriptionView: View {
-
+    
     var text: String
-
+    
     var body: some View {
         Text(text)
             .lineLimit(3)

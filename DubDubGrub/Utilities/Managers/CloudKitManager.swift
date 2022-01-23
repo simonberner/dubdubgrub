@@ -81,6 +81,26 @@ final class CloudKitManager {
 
     }
 
+    // The completion handler gives back an Array of DDGProfile upon success or an Error upon failure
+    func getCheckedInProfiles(for locationID: CKRecord.ID, completed: @escaping (Result<[DDGProfile], Error>) -> Void) {
+        // CKReferences - Back pointers
+        let reference = CKRecord.Reference(recordID: locationID, action: .none)
+        // any DDGProfile who's 'isCheckedIn' property is equals to the 'reference'
+        // ('%@' stands for 'placeholder', where we put the reference in)
+        let predicate = NSPredicate(format: "isCheckedIn == %@", reference)
+        let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
+
+        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
+            guard let records = records, error == nil else {
+                completed(.failure(error!))
+                return
+            }
+            let profiles = records.map { $0.convertToDDGProfile() }
+            // pass up all the checkedIn profiles (as a DDGProfile Array)
+            completed(.success(profiles))
+        }
+    }
+
     // save/update an Array of CKRecords
     func batchSave(records: [CKRecord], completed: @escaping (Result<[CKRecord], Error>) -> Void) {
 

@@ -16,6 +16,8 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var showAlert = false
     @Published var isShowingProfileModalView = false
+    @Published var checkedInProfiles: [DDGProfile] = []
+    @Published var isCheckedIn = false
 
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     var location: DDGLocation
@@ -68,18 +70,45 @@ final class LocationDetailViewModel: ObservableObject {
 
                 // Save the updated profile to CloudKit
                 CloudKitManager.shared.save(record: record) { result in
-                    switch result {
-                    case .success(_):
-                        //update our checkedInProfiles array
-                        Logger.locationDetailViewModel.info("✅ Checked In/Out successfuly")
+                    let profile = DDGProfile(record: record)
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(_):
+                            switch checkInStatus {
+                            case .checkedIn:
+                                checkedInProfiles.append(profile)
+                                Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedIn successfully")
+                            case .checkedOut:
+                                // for any DDGProfile in the Array where its id is equal to the profile.id, remove it
+                                checkedInProfiles.removeAll(where: {$0.id == profile.id})
+                                Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedOut successfully")
+                            }
 
-                    case .failure(_):
-                        Logger.locationDetailViewModel.info("❌ Error saving record")
+                            isCheckedIn = checkInStatus == .checkedIn
+
+                        case .failure(_):
+                            Logger.locationDetailViewModel.info("❌ Error saving record")
+                        }
                     }
                 }
 
             case .failure(_):
                 Logger.locationDetailViewModel.info("❌ Error fetching record")
+            }
+        }
+    }
+
+    func getCheckedInProfiles() {
+        CloudKitManager.shared.getCheckedInProfiles(for: location.id) { result in
+            DispatchQueue.main.async { [self] in
+                switch result {
+                case .success(let profiles):
+                    // update the Array of checkedIn profiles
+                    checkedInProfiles = profiles
+                case .failure(let error):
+                    // show alert
+                    Logger.locationDetailViewModel.error("getCheckedInProfiles failed! \(error.localizedDescription)")
+                }
             }
         }
     }
