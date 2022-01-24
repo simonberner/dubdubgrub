@@ -45,11 +45,15 @@ struct LocationDetailView: View {
                         } label: {
                             LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
                         }
-                        
-                        Button {
-                            viewModel.updateCheckInStatus(to: viewModel.isCheckedIn ? .checkedOut : .checkedIn)
-                        } label: {
-                            LocationActionButton(color: .brandPrimary, imageName: "person.fill.xmark")
+
+                        // hide check-in/out button in case the user is not signed in to its iCloud account
+                        if let _ = CloudKitManager.shared.profileRecordID {
+                            Button {
+                                viewModel.updateCheckInStatus(to: viewModel.isCheckedIn ? .checkedOut : .checkedIn)
+                            } label: {
+                                LocationActionButton(color: viewModel.isCheckedIn ? .grubRed : .brandPrimary,
+                                                     imageName: viewModel.isCheckedIn ? "person.fill.xmark" : "person.fill.checkmark")
+                            }
                         }
                     }
                 }
@@ -60,20 +64,33 @@ struct LocationDetailView: View {
                 Text("Who's here?")
                     .bold()
                     .font(.title2)
-                
-                ScrollView {
-                    // only 10 views can be placed in the grid
-                    LazyVGrid(columns: viewModel.columns, content: {
-                        ForEach(viewModel.checkedInProfiles) { profile in
-                            FirstNameAvatarView(profile: profile)
-                                .onTapGesture {
-                                    withAnimation(.easeOut(duration: 0.5)) {
-                                        viewModel.isShowingProfileModalView = true
-                                    }
+
+                ZStack {
+                    if viewModel.checkedInProfiles.isEmpty {
+                        Text("Nobody's in Here 😔")
+                            .bold()
+                            .font(.title2)
+                            .foregroundColor(.secondary)
+                            .padding(.top, 30)
+                    } else {
+                        ScrollView {
+                            // only 10 views can be placed in the grid?
+                            LazyVGrid(columns: viewModel.columns, content: {
+                                ForEach(viewModel.checkedInProfiles) { profile in
+                                    FirstNameAvatarView(profile: profile)
+                                        .onTapGesture {
+                                            withAnimation(.easeOut(duration: 0.5)) {
+                                                viewModel.isShowingProfileModalView = true
+                                            }
+                                        }
                                 }
+                            })
                         }
-                    })
+                    }
+
+                    if viewModel.isLoading { LoadingView() }
                 }
+
                 Spacer()
             }
             if viewModel.isShowingProfileModalView {
@@ -89,7 +106,10 @@ struct LocationDetailView: View {
                     .zIndex(2)
             }
         }
-        .onAppear { viewModel.getCheckedInProfiles() }
+        .onAppear {
+            viewModel.getCheckedInProfiles()
+            viewModel.getCheckedInStatus()
+        }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
             Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
