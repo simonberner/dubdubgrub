@@ -11,9 +11,13 @@ import UIKit
 
 final class CloudKitManager {
 
-    // CloudKitManager is a singleton
-    // (Be aware of that this might be a slippery slope for the future when the app grows and we add
-    // more and more stuff to the CloudKitManager. The ProfileViewModal already updates the profileRecordID of this instance!)
+    /**
+     The CloudKitManager is a singleton
+
+     Be aware of that having a specific instance of this class as a singleton, might be a slippery slope for the future growth of the app.
+     More features means also that more other instances will need to access the singleton and change it accordingly.
+     (e.g.The ProfileViewModal already updates the profileRecordID of this instance!)
+     */
     static let shared = CloudKitManager()
 
     // Noone can initialize
@@ -22,9 +26,13 @@ final class CloudKitManager {
     var userRecord: CKRecord?
     var profileRecordID: CKRecord.ID?
 
-    // this happens silently in the background on launch of the App
-    // (a user does not necesseraly have to be logged in, if she just
-    // wants to see who is checked in at which location)
+    /**
+     Get the userRecord of the current signed in iCloud user and store it in the instance property userRecord.
+     If there is no iCloud account configured, or if access is restricted, a @c CKErrorNotAuthenticated error will be returned.
+
+     This func gets called when the App starts (with the rendering of AppTabView). A user does not  have to be logged in,
+     if she just wants to see who is checked in at which location.
+     */
     func getUserRecord() {
         CKContainer.default().fetchUserRecordID { recordID, error in
             guard let recordID = recordID, error == nil else {
@@ -48,7 +56,12 @@ final class CloudKitManager {
             }
         }
     }
-    
+
+    /**
+     Get all available locations where users can visit
+
+     - Returns: A completion handler containing an array with all the locations available in the CloudKit database
+     */
     func getLocations(completed: @escaping (Result <[DDGLocation], Error>) -> Void) {
         // sort by location name
         let alphabeticalSort = NSSortDescriptor(key: DDGLocation.kName, ascending: true)
@@ -81,7 +94,12 @@ final class CloudKitManager {
 
     }
 
-    // The completion handler gives back an Array of DDGProfile upon success or an Error upon failure
+    /**
+     Get the currently checked-in user profiles
+
+     - Parameter locationID: The locationID to get the checkedIn profiles for
+     - Returns: A completion handler with the Result<[DDGProfiles], Error> (where [DDGProfile] is an Array containing the checkedIn profiles for this location)
+     */
     func getCheckedInProfiles(for locationID: CKRecord.ID, completed: @escaping (Result<[DDGProfile], Error>) -> Void) {
         // CKReferences - Back pointers
         let reference = CKRecord.Reference(recordID: locationID, action: .none)
@@ -101,7 +119,12 @@ final class CloudKitManager {
         }
     }
 
-    // save/update an Array of CKRecords
+    /**
+     Save or update an Array of CKRecords
+
+     - Parameter records: The Array of records to save or update
+     - Returns: A completion handler with the Result<[CKRecord], Error>. [CKRecord]
+     */
     func batchSave(records: [CKRecord], completed: @escaping (Result<[CKRecord], Error>) -> Void) {
 
         let operation = CKModifyRecordsOperation(recordsToSave: records)
@@ -123,7 +146,12 @@ final class CloudKitManager {
 
     }
 
-    // save/update a single CKRecord
+    /**
+     Save or Update  a single CKRecord - Network call to CloudKit
+
+     - Parameter record: The CKRecord to save/update
+     - Returns: A completion handler with the Result<CKRecord, Error>
+     */
     func save(record: CKRecord, completed: @escaping (Result<CKRecord, Error>) -> Void) {
         CKContainer.default().publicCloudDatabase.save(record) { record, error in
             guard let record = record, error == nil else {
@@ -136,9 +164,14 @@ final class CloudKitManager {
         }
     }
 
+    /**
+     Get the profileRecord  - Network call to CloudKit
+
+     - Parameter id: The CKRecord.ID to fetch the Record  with
+     - Returns: A completion handler with the Result<CKRecord, Error>
+     */
     func fetchRecord(with id: CKRecord.ID, completed: @escaping (Result<CKRecord, Error>) -> Void) {
 
-        // Get the profileRecord - network call to CK
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
             guard let record = record, error == nil else {
                 completed(.failure(error!))
