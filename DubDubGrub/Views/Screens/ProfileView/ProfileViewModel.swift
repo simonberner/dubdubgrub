@@ -20,6 +20,7 @@ final class ProfileViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var showAlert = false
     @Published var isLoading = false
+    @Published var isCheckedIn = false
 
     private var existingProfileRecord: CKRecord? {
         didSet { profileContext = .update }
@@ -150,6 +151,64 @@ final class ProfileViewModel: ObservableObject {
                     showAlert = true
                     alertItem = AlertContext.unableToGetProfile
                     Logger.profileViewModel.info("Could not get the profile: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    func getCheckedInStatus() {
+        guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
+            Logger.locationDetailViewModel.info("getCheckedInStatus: user is not signed-in to iCloud.")
+            return
+        }
+        CloudKitManager.shared.fetchRecord(with: profileRecordID) { [self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let record):
+                    // check if a user is checked in at some location
+                    if let _ = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference {
+                        isCheckedIn = true
+                    } else {
+                        isCheckedIn = false
+                        Logger.locationDetailViewModel.info("User is checkedOut - reference is nil")
+                    }
+                case .failure(_):
+                    // don't show any alert
+                    // design choice: let it fail silently because the Check Out is a "secondary feature"
+                    break
+                }
+            }
+        }
+    }
+
+    // Checkout from any location
+    func checkOut() {
+        guard let profileID = CloudKitManager.shared.profileRecordID else {
+            alertItem = AlertContext.unableToGetProfile
+            return
+        }
+
+        CloudKitManager.shared.fetchRecord(with: profileID) { [self] result in
+            switch result {
+            case .success(let record):
+                record[DDGProfile.kIsCheckedIn] = nil
+
+                CloudKitManager.shared.save(record: record) { [self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(_):
+                            isCheckedIn = false
+                        case .failure(_):
+                            showAlert = true
+                            alertItem = AlertContext.checkInOutFailed
+                        }
+                    }
+                }
+                
+            case .failure(_):
+                DispatchQueue.main.async {
+                    showAlert = true
+                    alertItem = AlertContext.checkInOutFailed
                 }
             }
         }

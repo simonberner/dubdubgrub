@@ -68,15 +68,17 @@ struct ProfileView: View {
 
                         Spacer()
 
-                        Button {
-
-                        } label: {
-                            Label("Check Out", systemImage: "mappin.and.ellipse")
-                                .font(.callout)
-                                .frame(width: 125, height: 30)
-                                .background(Color.red)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                        if viewModel.isCheckedIn {
+                            Button {
+                                viewModel.checkOut()
+                            } label: {
+                                Label("Check Out", systemImage: "mappin.and.ellipse")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .frame(width: 100, height: 26)
+                                    .background(Color.grubRed)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
                         }
                     }
 
@@ -121,6 +123,7 @@ struct ProfileView: View {
             // and we don't go any deeper down the rabbit hole do find a better solution (eg. a CK
             // subscription to the profile data)
             viewModel.getProfile()
+            viewModel.getCheckedInStatus()
         })
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
