@@ -30,4 +30,7 @@ extension Logger {
 
     // Log the LocationDetailViewModel
     static let locationDetailViewModel = Logger(subsystem: subsystem, category: "LocationDetailViewModel")
+
+    // Log the LocationDetailViewModel
+    static let locationListView = Logger(subsystem: subsystem, category: "LocationListView")
 }

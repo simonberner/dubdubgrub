@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 struct LocationListView: View {
 
@@ -17,6 +18,18 @@ struct LocationListView: View {
                 ForEach(locationManager.locations) { location in
                     NavigationLink(destination: LocationDetailView(viewModel: LocationDetailViewModel(location: location))) {
                         LocationListCell(location: location)
+                    }
+                }
+            }
+            .onAppear {
+                // TODO: Refactor into a viewModel
+                CloudKitManager.shared.getCheckedInProfilesDictionary { result in
+                    switch result {
+                    case .success(let checkedInProfiles):
+                        print(checkedInProfiles)
+                    case .failure(let error):
+                        // show alertItem
+                        Logger.locationListView.error("Error getting back dictionary: \(error.localizedDescription)")
                     }
                 }
             }
