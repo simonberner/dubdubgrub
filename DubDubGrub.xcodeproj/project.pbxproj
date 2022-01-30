@@ -21,6 +21,7 @@
 		1567F9462799B1550020C7C8 /* LocationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */; };
 		1567F948279A012A0020C7C8 /* ProfileModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1567F947279A012A0020C7C8 /* ProfileModalView.swift */; };
 		158E240727975CF6000DEC3F /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158E240627975CF6000DEC3F /* ProfileViewModel.swift */; };
+		159050AE27A3FD49004AB387 /* LocationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159050AD27A3FD49004AB387 /* LocationListViewModel.swift */; };
 		1596BE64278C6D3D0001D2BE /* CKAsset+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */; };
 		159B6B8A278F3E5B007A4912 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B6B89278F3E5B007A4912 /* OnboardView.swift */; };
 		159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B6B8B278F75AC007A4912 /* LogoView.swift */; };
@@ -80,6 +81,7 @@
 		1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
 		1567F947279A012A0020C7C8 /* ProfileModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModalView.swift; sourceTree = "<group>"; };
 		158E240627975CF6000DEC3F /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		159050AD27A3FD49004AB387 /* LocationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListViewModel.swift; sourceTree = "<group>"; };
 		1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
 		159B6B89278F3E5B007A4912 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
 		159B6B8B278F75AC007A4912 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
@@ -137,14 +139,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		15175F142771CD1800CD6A30 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				15175F152771CD2800CD6A30 /* LocationListCell.swift */,
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
 		151FEEB42791CA5A00A85A8C /* UIKitComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,11 +158,11 @@
 		152F3E32277BB0F20074D2B1 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				159050AC27A3FC38004AB387 /* LocationListView */,
 				1567F9442799B13D0020C7C8 /* LocationDetailView */,
 				158E240527975CE1000DEC3F /* ProfileView */,
 				15DB7C4327860D1800BEC16F /* LocationMapView */,
 				15FB054D2770D6710036A003 /* AppTabView.swift */,
-				15FB05522770D7310036A003 /* LocationListView.swift */,
 				159B6B89278F3E5B007A4912 /* OnboardView.swift */,
 			);
 			path = Screens;
@@ -212,6 +206,16 @@
 				15FB05542770D7410036A003 /* ProfileView.swift */,
 			);
 			path = ProfileView;
+			sourceTree = "<group>";
+		};
+		159050AC27A3FC38004AB387 /* LocationListView */ = {
+			isa = PBXGroup;
+			children = (
+				159050AD27A3FD49004AB387 /* LocationListViewModel.swift */,
+				15FB05522770D7310036A003 /* LocationListView.swift */,
+				15175F152771CD2800CD6A30 /* LocationListCell.swift */,
+			);
+			path = LocationListView;
 			sourceTree = "<group>";
 		};
 		15D325A62780E8260007FD17 /* Utilities */ = {
@@ -340,7 +344,6 @@
 				15F6FC6627904F3C00FC2C67 /* Buttons */,
 				152F3E2A277B7ACA0074D2B1 /* Modifiers */,
 				152F3E33277BB1BF0074D2B1 /* CustomViews */,
-				15175F142771CD1800CD6A30 /* Cells */,
 				152F3E32277BB0F20074D2B1 /* Screens */,
 			);
 			path = Views;
@@ -505,6 +508,7 @@
 				15D3267027986EA3002437E2 /* LoadingView.swift in Sources */,
 				15D325AD278232C30007FD17 /* CKRecord+Ext.swift in Sources */,
 				159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */,
+				159050AE27A3FD49004AB387 /* LocationListViewModel.swift in Sources */,
 				152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */,
 				15FB05552770D7410036A003 /* ProfileView.swift in Sources */,
 				15FB051D27708FF70036A003 /* DubDubGrubApp.swift in Sources */,

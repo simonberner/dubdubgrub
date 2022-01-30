@@ -6,33 +6,25 @@
 //
 
 import SwiftUI
-import OSLog
 
 struct LocationListView: View {
 
     @EnvironmentObject private var locationManager: LocationManager
+    @StateObject private var viewModel = LocationListViewModel()
 
     var body: some View {
+        // TODO: add pull and refresh of the Navigation List in the view
         NavigationView {
             List {
                 ForEach(locationManager.locations) { location in
                     NavigationLink(destination: LocationDetailView(viewModel: LocationDetailViewModel(location: location))) {
-                        LocationListCell(location: location)
+                        LocationListCell(location: location,
+                                         profiles: viewModel.checkedInProfiles[location.id, default: []])
+                        // if nobody is checked into the location, we won't have the location.id in the checkedInProfiles dictionary. We then return an empty array (if nothing is at that key)
                     }
                 }
             }
-            .onAppear {
-                // TODO: Refactor into a viewModel
-                CloudKitManager.shared.getCheckedInProfilesDictionary { result in
-                    switch result {
-                    case .success(let checkedInProfiles):
-                        print(checkedInProfiles)
-                    case .failure(let error):
-                        // show alertItem
-                        Logger.locationListView.error("Error getting back dictionary: \(error.localizedDescription)")
-                    }
-                }
-            }
+            .onAppear { viewModel.getCheckedInProfilesDictionary() }
             .listStyle(.plain)
             .navigationTitle("Grub Spots")
         }
