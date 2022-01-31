@@ -27,6 +27,7 @@
 		159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159B6B8B278F75AC007A4912 /* LogoView.swift */; };
 		15A046E12787837000C086A0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A046E02787837000C086A0 /* LocationManager.swift */; };
 		15BE43DD27A7F40500435807 /* MapBallon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BE43DC27A7F40500435807 /* MapBallon.swift */; };
+		15BE43DF27A8721400435807 /* DDGAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BE43DE27A8721400435807 /* DDGAnnotation.swift */; };
 		15C684BF277F540F00067C4E /* DDGProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C684BE277F540F00067C4E /* DDGProfile.swift */; };
 		15C684C1277F657700067C4E /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C684C0277F657700067C4E /* MockData.swift */; };
 		15D0FEA92784B88E009EF141 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D0FEA82784B88E009EF141 /* AlertItem.swift */; };
@@ -88,6 +89,7 @@
 		159B6B8B278F75AC007A4912 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		15A046E02787837000C086A0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		15BE43DC27A7F40500435807 /* MapBallon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBallon.swift; sourceTree = "<group>"; };
+		15BE43DE27A8721400435807 /* DDGAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGAnnotation.swift; sourceTree = "<group>"; };
 		15C684BE277F540F00067C4E /* DDGProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGProfile.swift; sourceTree = "<group>"; };
 		15C684C0277F657700067C4E /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		15D0FEA82784B88E009EF141 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				15BE43DC27A7F40500435807 /* MapBallon.swift */,
+				15BE43DE27A8721400435807 /* DDGAnnotation.swift */,
 			);
 			path = MapAnnotation;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 				15175F1A2772778400CD6A30 /* LocationDetailView.swift in Sources */,
 				15C684C1277F657700067C4E /* MockData.swift in Sources */,
 				15FB05532770D7310036A003 /* LocationListView.swift in Sources */,
+				15BE43DF27A8721400435807 /* DDGAnnotation.swift in Sources */,
 				15DB7C4527860D3A00BEC16F /* LocationMapViewModel.swift in Sources */,
 				15C684BF277F540F00067C4E /* DDGProfile.swift in Sources */,
 				1554BA22277E3C90006FB3C9 /* DDGLocation.swift in Sources */,
