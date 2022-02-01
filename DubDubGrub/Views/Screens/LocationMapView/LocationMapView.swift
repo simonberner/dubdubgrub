@@ -17,7 +17,14 @@ struct LocationMapView: View {
     var body: some View {
         ZStack {
             Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: locationManager.locations) { location in
-                MapMarker(coordinate: location.location.coordinate, tint: .brandPrimary)
+                MapAnnotation(coordinate: location.location.coordinate, anchorPoint: CGPoint(x: 0.5, y: 0.75)) {
+                    DDGAnnotation(location: location)
+                        .onTapGesture {
+                            // track what the user tabs
+                            locationManager.selectedLocation = location
+                            viewModel.isShowingDetailView = true
+                        }
+                }
             }
             .accentColor(.grubRed) // MARK: deprecated in future iOS versions
             .ignoresSafeArea(edges: .top)
@@ -28,9 +35,19 @@ struct LocationMapView: View {
                 Spacer()
             }
         }
-        .sheet(isPresented: $viewModel.isShowingOnboardView, onDismiss: viewModel.checkLocationServicesIsEnabled) {
-            // closure the returns the content of the sheet
-            OnboardView(isShowingOnboardView: $viewModel.isShowingOnboardView)
+        .sheet(isPresented: $viewModel.isShowingDetailView) {
+            NavigationView {
+                // closure the returns the content of the sheet
+                // force unwrap? -> it is safe because onTapGesture a location is assigned to that property
+                LocationDetailView(viewModel: LocationDetailViewModel(location: locationManager.selectedLocation!))
+                    .toolbar {
+                        Button("Dismiss") {
+                            viewModel.isShowingDetailView = false
+                        }
+                        .accentColor(.brandPrimary) // or use
+//                        .foregroundColor(.brandPrimary)
+                    }
+            }
         }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
@@ -39,7 +56,6 @@ struct LocationMapView: View {
                       Text(viewModel.alertItem?.message ?? "")
                   }
         .onAppear {
-            viewModel.runStartupChecks()
             if locationManager.locations.isEmpty {
                 // pass in a reference to the locationManager (as the view model is a class)!
                 viewModel.getLocations(for: locationManager)

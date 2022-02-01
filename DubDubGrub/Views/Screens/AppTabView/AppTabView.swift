@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct AppTabView: View {
+
+    @StateObject var viewModel = AppTabViewModel()
+
     var body: some View {
         TabView {
             LocationMapView()
@@ -28,8 +31,15 @@ struct AppTabView: View {
             }
 
         }
-        .onAppear { CloudKitManager.shared.getUserRecord() }
+        .onAppear {
+            CloudKitManager.shared.getUserRecord()
+            viewModel.runStartupChecks()
+        }
         .accentColor(.brandPrimary)
+        .sheet(isPresented: $viewModel.isShowingOnboardView, onDismiss: viewModel.checkLocationServicesIsEnabled) {
+            // closure the returns the content of the sheet
+            OnboardView(isShowingOnboardView: $viewModel.isShowingOnboardView)
+        }
     }
 }
 

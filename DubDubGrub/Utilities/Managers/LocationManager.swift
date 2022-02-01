@@ -10,4 +10,6 @@ import Foundation
 // Very similar to a ViewModel
 final class LocationManager: ObservableObject {
     @Published var locations: [DDGLocation] = []
+
+    var selectedLocation: DDGLocation?
 }
