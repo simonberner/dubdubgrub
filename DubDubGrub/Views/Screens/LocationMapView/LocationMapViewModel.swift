@@ -7,10 +7,12 @@
 
 import MapKit
 import OSLog
+import CloudKit
 
 // ObservableObject: others can observe instances of this class
 final class LocationMapViewModel: ObservableObject {
 
+    @Published var checkedInProfiles: [CKRecord.ID: Int] = [:]
     @Published var isShowingDetailView = false
     @Published var showAlert = false
     @Published var alertItem: AlertItem?
@@ -42,6 +44,20 @@ final class LocationMapViewModel: ObservableObject {
                     alertItem = AlertContext.unableToGetLocations
                     showAlert = true
                     Logger.locationMapViewModel.error("getLocations: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    func getCheckedInCounts() {
+        CloudKitManager.shared.getCheckedInProfilesCount { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let checkedInProfiles):
+                    self.checkedInProfiles = checkedInProfiles
+                case .failure(_):
+                    // show alert
+                    break
                 }
             }
         }

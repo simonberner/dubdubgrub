@@ -121,6 +121,7 @@ final class CloudKitManager {
 
     /**
      Get all the checkedIn user profiles for all the locations (this is the most expensive CK call) and put them into a Dictionary: [DDGLocation : [DDGProfile]]
+     -> func for the LocationListViewModel
 
      - Returns: A completion handler with the Result containing a dictionary [DDGLocation : [DDGProfile]]
      */
@@ -150,6 +151,59 @@ final class CloudKitManager {
             // we are going to append the profile to it.
             // if there is not already a DDGProfile at that location recordID, we are appending the profile to a fresh new Array
             checkedInProfiles[locationReference.recordID, default: []].append(profile)
+        }
+
+        // The closure to execute after CloudKit retrieves all of the records.
+        operation.queryCompletionBlock = { cursor, error in
+            guard error == nil else {
+                completed(.failure(error!))
+                return
+            }
+
+            // TODO: handle cursor later on
+            // (cursor for pagination: you pass in the cursor to a next query so that it knows where to start querying the record
+
+            completed(.success(checkedInProfiles))
+        }
+
+        // run the operation
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
+    /**
+     Get all the checkedIn user profiles count for all the locations and put them into a Dictionary: [DDGLocation : Int]
+     -> func for the LocationMapViewModel
+
+     - Returns: A completion handler with the Result containing a dictionary [DDGLocation : Int]
+     */
+    func getCheckedInProfilesCount(completed: @escaping (Result<[CKRecord.ID : Int], Error>) -> Void) {
+        let predicate = NSPredicate(format: "isCheckedInNilCheck == 1")
+        let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
+        // CKQueryOperation: we get back 2 closures:
+        // - first closure feeds us the records as they are being downloaded
+        // - second closure fires of when the query is done
+        let operation = CKQueryOperation(query: query) // by using CKQueryOperation we get only the keys back we actually want
+        operation.desiredKeys = [DDGProfile.kIsCheckedIn] // for the profile count we just need to download the isCheckedIn reference (uuid)
+
+        // Build dictionary (locationId and Int for the count)
+        var checkedInProfiles: [CKRecord.ID : Int] = [:]
+
+        // The closure to execute when a record (that has matched the above predicate) becomes available.
+        operation.recordFetchedBlock = { record in
+            // check what the referenceId is (that is the location where that profile is checked-in to)
+            // cast it into the specific type
+            guard let locationReference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
+
+            // how many counts are at each location
+            if let count = checkedInProfiles[locationReference.recordID] {
+                // if we have a count for the location, we
+                checkedInProfiles[locationReference.recordID] = count + 1
+
+            } else {
+                // if the count at a location is nil, go and make the count = 1
+                // because that is the first time we have seen this record when building the dictionary
+                checkedInProfiles[locationReference.recordID] = 1
+            }
         }
 
         // The closure to execute after CloudKit retrieves all of the records.
