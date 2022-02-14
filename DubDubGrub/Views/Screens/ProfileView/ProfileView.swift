@@ -131,9 +131,7 @@ struct ProfileView: View {
                   } message: {
                       Text(viewModel.alertItem?.message ?? "")
                   }
-                  .sheet(isPresented: $viewModel.isShowingPhotoPicker) {
-                      PhotoPicker(image: $viewModel.avatar)
-        }
+                  .sheet(isPresented: $viewModel.isShowingPhotoPicker) { PhotoPicker(image: $viewModel.avatar) }
     }
 }
 

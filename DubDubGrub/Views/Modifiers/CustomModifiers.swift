@@ -9,6 +9,7 @@ import SwiftUI
 
 // Custom modifier
 struct ProfileViewText: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
         .font(.system(size: 32, weight: .bold))

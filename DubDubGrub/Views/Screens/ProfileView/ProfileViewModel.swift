@@ -25,9 +25,10 @@ final class ProfileViewModel: ObservableObject {
     private var existingProfileRecord: CKRecord? {
         didSet { profileContext = .update }
     }
+
     var profileContext: ProfileContext = .create
 
-    func isValidProfile() -> Bool {
+    private func isValidProfile() -> Bool {
 
         guard !firstName.isEmpty,
               !lastName.isEmpty,
@@ -128,7 +129,6 @@ final class ProfileViewModel: ObservableObject {
         }
 
         guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else { return }
-
         let profileRecordID = profileReference.recordID
 
         showLoadingView()
@@ -172,6 +172,7 @@ final class ProfileViewModel: ObservableObject {
                         isCheckedIn = false
                         Logger.locationDetailViewModel.info("User is checkedOut - reference is nil")
                     }
+
                 case .failure(_):
                     // don't show any alert
                     // design choice: let it fail silently because the Check Out is a "secondary feature"

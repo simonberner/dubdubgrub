@@ -18,8 +18,7 @@ struct LocationListView: View {
             List {
                 ForEach(locationManager.locations) { location in
                     NavigationLink(destination: LocationDetailView(viewModel: LocationDetailViewModel(location: location))) {
-                        LocationListCell(location: location,
-                                         profiles: viewModel.checkedInProfiles[location.id, default: []])
+                        LocationListCell(location: location, profiles: viewModel.checkedInProfiles[location.id, default: []])
                         // if nobody is checked into the location, we won't have the location.id in the checkedInProfiles dictionary. We then return an empty array (if nothing is at that key)
                     }
                 }

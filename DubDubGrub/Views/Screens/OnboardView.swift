@@ -17,8 +17,8 @@ struct OnboardView: View {
         // (children) via a GeometryProxy
         GeometryReader { proxy in
             VStack {
-                LogoView(frameWidth: proxy.size.width)
-                    .padding(.bottom)
+                LogoView(frameWidth: proxy.size.width).padding(.bottom)
+                
                 VStack(alignment: .leading, spacing: 34) {
                     OnboardInfoView(imageName: "building.2.crop.circle",
                                 title: "Restaurant Locations",

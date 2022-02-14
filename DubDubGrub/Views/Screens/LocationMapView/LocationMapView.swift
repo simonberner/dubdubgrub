@@ -40,10 +40,7 @@ struct LocationMapView: View {
                 // closure the returns the content of the sheet
                 // force unwrap? -> it is safe because onTapGesture a location is assigned to that property
                 LocationDetailView(viewModel: LocationDetailViewModel(location: locationManager.selectedLocation!))
-                    .toolbar {
-                        Button("Dismiss") {
-                            viewModel.isShowingDetailView = false
-                        }
+                    .toolbar { Button("Dismiss") { viewModel.isShowingDetailView = false }
                         .accentColor(.brandPrimary) // or use
 //                        .foregroundColor(.brandPrimary)
                     }
@@ -56,10 +53,8 @@ struct LocationMapView: View {
                       Text(viewModel.alertItem?.message ?? "")
                   }
         .onAppear {
-            if locationManager.locations.isEmpty {
-                // pass in a reference to the locationManager (as the view model is a class)!
-                viewModel.getLocations(for: locationManager)
-            }
+            // pass in a reference to the locationManager (as the view model is a class)!
+            if locationManager.locations.isEmpty { viewModel.getLocations(for: locationManager) }
             viewModel.getCheckedInCounts()
         }
     }

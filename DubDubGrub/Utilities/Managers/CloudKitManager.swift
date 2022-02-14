@@ -91,7 +91,6 @@ final class CloudKitManager {
             // pass up the locations
             completed(.success(locations))
         }
-
     }
 
     /**
@@ -247,7 +246,6 @@ final class CloudKitManager {
 
         // run the operation (to save the records)
         CKContainer.default().publicCloudDatabase.add(operation)
-
     }
 
     /**
@@ -275,7 +273,6 @@ final class CloudKitManager {
      - Returns: A completion handler with the Result<CKRecord, Error>
      */
     func fetchRecord(with id: CKRecord.ID, completed: @escaping (Result<CKRecord, Error>) -> Void) {
-
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
             guard let record = record, error == nil else {
                 completed(.failure(error!))

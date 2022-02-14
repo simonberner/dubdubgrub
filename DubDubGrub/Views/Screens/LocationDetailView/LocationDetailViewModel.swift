@@ -23,9 +23,7 @@ final class LocationDetailViewModel: ObservableObject {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     var location: DDGLocation
 
-    init(location: DDGLocation) {
-        self.location = location
-    }
+    init(location: DDGLocation) { self.location = location }
 
     func getDirectionsToLocation() {
         let placemark = MKPlacemark(coordinate: location.location.coordinate)
