@@ -13,4 +13,9 @@ extension View {
     func profileNameStyle() -> some View {
         self.modifier(ProfileViewText())
     }
+
+    func playHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
 }
