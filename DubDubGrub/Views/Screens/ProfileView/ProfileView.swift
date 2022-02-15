@@ -106,6 +106,7 @@ struct ProfileView: View {
             if viewModel.isLoading {LoadingView()}
         }
         .navigationTitle("Profile")
+        .navigationBarTitleDisplayMode(DeviceTypes.isiPhone8Standard ? .inline : .automatic)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 HStack {
