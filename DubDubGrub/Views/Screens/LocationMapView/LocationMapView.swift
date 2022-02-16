@@ -19,7 +19,7 @@ struct LocationMapView: View {
             Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: locationManager.locations) { location in
                 MapAnnotation(coordinate: location.location.coordinate, anchorPoint: CGPoint(x: 0.5, y: 0.75)) {
                     DDGAnnotation(location: location, number: viewModel.checkedInProfiles[location.id, default: 0])
-                        .accessibility(label: Text("Map Pin \(location.name) \(viewModel.checkedInProfiles[location.id, default: 0]) people checked in."))
+                        .accessibility(label: Text(viewModel.createVoiceOverSummary(for: location)))
                         .onTapGesture {
                             // track what the user tabs
                             locationManager.selectedLocation = location

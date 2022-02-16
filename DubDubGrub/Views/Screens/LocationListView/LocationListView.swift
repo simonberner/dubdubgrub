@@ -20,6 +20,8 @@ struct LocationListView: View {
                     NavigationLink(destination: LocationDetailView(viewModel: LocationDetailViewModel(location: location))) {
                         LocationListCell(location: location, profiles: viewModel.checkedInProfiles[location.id, default: []])
                         // if nobody is checked into the location, we won't have the location.id in the checkedInProfiles dictionary. We then return an empty array (if nothing is at that key)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(Text(viewModel.createVoiceOverSummary(for: location)))
                     }
                 }
             }

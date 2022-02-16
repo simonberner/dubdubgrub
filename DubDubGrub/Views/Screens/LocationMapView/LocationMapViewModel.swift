@@ -62,4 +62,11 @@ final class LocationMapViewModel: ObservableObject {
             }
         }
     }
+
+    func createVoiceOverSummary(for location: DDGLocation) -> String {
+        let count = checkedInProfiles[location.id, default: 0]
+        let personPlurality = count == 1 ? "person" : "people"
+
+        return " Map Pin \(location.name) \(count) \(personPlurality) checked in."
+    }
 }
