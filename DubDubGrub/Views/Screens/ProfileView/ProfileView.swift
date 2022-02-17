@@ -30,6 +30,10 @@ struct ProfileView: View {
                             AvatarView(image: viewModel.avatar, size: 80)
                             EditImage()
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel(Text("Profile Photo"))
+                        .accessibilityHint(Text("Opens the iPhone's photo picker"))
                         .onTapGesture {
                             viewModel.isShowingPhotoPicker = true
                         }
@@ -65,6 +69,7 @@ struct ProfileView: View {
 
                     HStack {
                         CharacterRemainView(currentCount: viewModel.bio.count)
+                            .accessibilityAddTraits(.isHeader)
 
                         Spacer()
 
@@ -80,6 +85,7 @@ struct ProfileView: View {
                                     .foregroundColor(.white)
                                     .cornerRadius(8)
                             }
+                            .accessibilityLabel(Text("Check out of the current location"))
                         }
                     }
 
@@ -90,6 +96,7 @@ struct ProfileView: View {
                                     .stroke(Color.secondary, lineWidth: 1))
                         .focused($focusedTextField, equals: .bio)
                         .focused($dismissKeyboard)
+                        .accessibilityHint(Text("This TextField is for your bio and has a 100 character maximum."))
                 }
                 .padding(.horizontal)
 
