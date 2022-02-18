@@ -13,6 +13,7 @@ struct LocationMapView: View {
 
     @EnvironmentObject private var locationManager: LocationManager
     @StateObject private var viewModel = LocationMapViewModel()
+    @Environment(\.sizeCategory) var sizeCategory
 
     var body: some View {
         ZStack {
@@ -41,7 +42,7 @@ struct LocationMapView: View {
             NavigationView {
                 // closure the returns the content of the sheet
                 // force unwrap? -> it is safe because onTapGesture a location is assigned to that property
-                LocationDetailView(viewModel: LocationDetailViewModel(location: locationManager.selectedLocation!))
+                viewModel.createLocationDetailView(for: locationManager.selectedLocation!, in: sizeCategory)
                     .toolbar { Button("Dismiss") { viewModel.isShowingDetailView = false }
                         .accentColor(.brandPrimary) // or use
 //                        .foregroundColor(.brandPrimary)

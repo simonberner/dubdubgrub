@@ -18,4 +18,12 @@ extension View {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
     }
+
+    func embedInScrollView() -> some View {
+        GeometryReader { geometry in
+            ScrollView {
+                frame(minHeight: geometry.size.height, maxHeight: .infinity)
+            }
+        }
+    }
 }

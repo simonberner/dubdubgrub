@@ -13,6 +13,7 @@ struct LocationDetailView: View {
     // but don’t own it directly. -> The object is passed in from the LocationListView!
     // (https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject)
     @ObservedObject var viewModel: LocationDetailViewModel
+    @Environment(\.sizeCategory) var sizeCategory
     
     var body: some View {
         ZStack {
@@ -86,7 +87,7 @@ struct LocationDetailView: View {
                     } else {
                         ScrollView {
                             // only 10 views can be placed in the grid?
-                            LazyVGrid(columns: viewModel.columns, content: {
+                            LazyVGrid(columns: viewModel.getColumns(for: sizeCategory), content: {
                                 ForEach(viewModel.checkedInProfiles) { profile in
                                     FirstNameAvatarView(profile: profile)
                                         .accessibilityElement(children: .ignore)
@@ -111,7 +112,7 @@ struct LocationDetailView: View {
             // if the profile modal view is showing: hide all the stuff in the VStack from system accessibility
             .accessibilityHidden(viewModel.isShowingProfileModalView)
             if viewModel.isShowingProfileModalView {
-                Color(.systemBackground)
+                Color(.black)
                     .ignoresSafeArea()
                     .opacity(0.1)
                 //                    .transition(.opacity)
@@ -161,12 +162,13 @@ struct LocationActionButton: View {
 }
 
 struct FirstNameAvatarView: View {
-    
+
+    @Environment(\.sizeCategory) var sizeCategory
     var profile: DDGProfile
     
     var body: some View {
         VStack {
-            AvatarView(image: profile.getImage(for: .avatar), size: 64)
+            AvatarView(image: profile.getImage(for: .avatar), size: sizeCategory >= .accessibilityMedium ? 100 : 64)
             
             Text(profile.firstName)
                 .bold()
@@ -206,9 +208,8 @@ struct DescriptionView: View {
     
     var body: some View {
         Text(text)
-            .lineLimit(3)
             .minimumScaleFactor(0.75)
-            .frame(height: 70)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
     }
 }
@@ -217,7 +218,15 @@ struct LocationDetailView_Previews: PreviewProvider {
     static var previews: some View {
         // Tip: Put the Preview into a NavigationView to see how it looks like
         NavigationView {
-            LocationDetailView(viewModel: LocationDetailViewModel(location: DDGLocation(record: MockData.location)))
+            LocationDetailView(viewModel: LocationDetailViewModel(location: DDGLocation(record: MockData.chipotle)))
         }
+        .preferredColorScheme(.dark)
+        .environment(\.sizeCategory, .extraExtraExtraLarge)
+
+        NavigationView {
+            LocationDetailView(viewModel: LocationDetailViewModel(location: DDGLocation(record: MockData.chipotle))).embedInScrollView()
+        }
+        .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+
     }
 }

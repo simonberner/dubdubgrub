@@ -20,13 +20,17 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var isCheckedIn = false
     @Published var isLoading = false
 
-    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     var location: DDGLocation
     var selectedProfile: DDGProfile? {
         didSet { isShowingProfileModalView = true }
     }
 
     init(location: DDGLocation) { self.location = location }
+
+    func getColumns(for sizeCategory: ContentSizeCategory) -> [GridItem] {
+        let numberOfColumns = sizeCategory >= .accessibilityMedium ? 1 : 3
+        return Array(repeating: GridItem(.flexible()), count: numberOfColumns)
+    }
 
     func getDirectionsToLocation() {
         let placemark = MKPlacemark(coordinate: location.location.coordinate)

@@ -8,6 +8,7 @@
 import MapKit
 import OSLog
 import CloudKit
+import SwiftUI
 
 // ObservableObject: others can observe instances of this class
 final class LocationMapViewModel: ObservableObject {
@@ -68,5 +69,13 @@ final class LocationMapViewModel: ObservableObject {
         let personPlurality = count == 1 ? "person" : "people"
 
         return " Map Pin \(location.name) \(count) \(personPlurality) checked in."
+    }
+
+    @ViewBuilder func createLocationDetailView(for location: DDGLocation, in sizeCategory: ContentSizeCategory) -> some View {
+        if sizeCategory >= .accessibilityMedium {
+            LocationDetailView(viewModel: LocationDetailViewModel(location: location)).embedInScrollView()
+        } else {
+            LocationDetailView(viewModel: LocationDetailViewModel(location: location))
+        }
     }
 }
