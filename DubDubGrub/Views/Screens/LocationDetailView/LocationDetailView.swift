@@ -96,7 +96,7 @@ struct LocationDetailView: View {
                                         .accessibilityLabel(Text("\(profile.firstName) \(profile.lastName)"))
                                         .onTapGesture {
                                             withAnimation(.easeOut(duration: 0.5)) {
-                                                viewModel.selectedProfile = profile
+                                                viewModel.show(profile: profile, in: sizeCategory)
                                             }
                                         }
                                 }
@@ -128,6 +128,13 @@ struct LocationDetailView: View {
         .onAppear {
             viewModel.getCheckedInProfiles()
             viewModel.getCheckedInStatus()
+        }
+        .sheet(isPresented: $viewModel.isShowingProfileModalSheet) {
+            NavigationView {
+                ProfileSheetView(profile: viewModel.selectedProfile!)
+                    .toolbar { Button("Dismiss") { viewModel.isShowingProfileModalSheet = false } }
+            }
+            .accentColor(.brandPrimary)
         }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {

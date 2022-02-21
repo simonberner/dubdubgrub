@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1503FF6227C2DB9300E4AFD8 /* ProfileSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1503FF6127C2DB9300E4AFD8 /* ProfileSheetView.swift */; };
 		15175F162771CD2800CD6A30 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15175F152771CD2800CD6A30 /* LocationListCell.swift */; };
 		15175F1827721DB300CD6A30 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15175F1727721DB300CD6A30 /* AvatarView.swift */; };
 		15175F1A2772778400CD6A30 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15175F192772778400CD6A30 /* LocationDetailView.swift */; };
@@ -70,6 +71,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1503FF6127C2DB9300E4AFD8 /* ProfileSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSheetView.swift; sourceTree = "<group>"; };
 		15175F152771CD2800CD6A30 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		15175F1727721DB300CD6A30 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		15175F192772778400CD6A30 /* LocationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				1567F9452799B1550020C7C8 /* LocationDetailViewModel.swift */,
 				15175F192772778400CD6A30 /* LocationDetailView.swift */,
 				1567F947279A012A0020C7C8 /* ProfileModalView.swift */,
+				1503FF6127C2DB9300E4AFD8 /* ProfileSheetView.swift */,
 			);
 			path = LocationDetailView;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				15FB05512770D7140036A003 /* LocationMapView.swift in Sources */,
 				1567F948279A012A0020C7C8 /* ProfileModalView.swift in Sources */,
 				159B6B8A278F3E5B007A4912 /* OnboardView.swift in Sources */,
+				1503FF6227C2DB9300E4AFD8 /* ProfileSheetView.swift in Sources */,
 				15175F1A2772778400CD6A30 /* LocationDetailView.swift in Sources */,
 				15C684C1277F657700067C4E /* MockData.swift in Sources */,
 				15FB05532770D7310036A003 /* LocationListView.swift in Sources */,
