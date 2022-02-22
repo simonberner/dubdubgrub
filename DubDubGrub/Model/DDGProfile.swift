@@ -52,4 +52,12 @@ struct DDGProfile: Identifiable {
         }
     }
 
+    // MARK: - examples for writing more specific code than the above getImage function
+
+    // computed property
+    var avatarImage: UIImage {
+        guard let avatar = avatar else { return PlaceholderImage.avatar }
+        return avatar.convertToUIImage(in: .square)
+    }
+
 }

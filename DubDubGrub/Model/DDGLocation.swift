@@ -58,14 +58,18 @@ struct DDGLocation: Identifiable {
         }
     }
 
-//    func createSquareAsset() -> UIImage {
-//        guard let asset = squareAsset else { return PlaceholderImage.square }
-//        return asset.convertToUIImage(in: .square)
-//    }
-//
-//    func createBannerAsset() -> UIImage {
-//        guard let asset = bannerAsset else { return PlaceholderImage.banner }
-//        return asset.convertToUIImage(in: .banner)
-//    }
+    // MARK: - examples for writing more specific code than the above getImage function
+
+    // computed property
+    var squareImage: UIImage {
+        guard let asset = squareAsset else { return PlaceholderImage.square }
+        return asset.convertToUIImage(in: .square)
+    }
+
+    // computed property
+    var bannerImage: UIImage {
+        guard let asset = bannerAsset else { return PlaceholderImage.banner }
+        return asset.convertToUIImage(in: .banner)
+    }
 
 }

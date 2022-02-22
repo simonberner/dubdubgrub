@@ -12,19 +12,17 @@ extension CKAsset {
 
     // convert a CKAsset (external file in CloudKit) into a UIImage with the corresponding dimension
     func convertToUIImage(in dimension: ImageDimension) -> UIImage {
-        let placeholderImage = dimension.placeholderImage
 
         // unwrap the optional fileURL of the CKAsset (self = CKAsset)
-        guard let fileUrl = self.fileURL else { return placeholderImage }
+        guard let fileUrl = self.fileURL else { return dimension.placeholderImage }
 
         do {
             // get the image data from the file url
             let data = try Data(contentsOf: fileUrl)
             // return the specific image object with the specified data
-            return UIImage(data: data) ?? placeholderImage
+            return UIImage(data: data) ?? dimension.placeholderImage
         } catch {
-            return placeholderImage
+            return dimension.placeholderImage
         }
     }
-
 }
