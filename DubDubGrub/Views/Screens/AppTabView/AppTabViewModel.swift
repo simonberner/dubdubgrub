@@ -14,19 +14,19 @@ final class AppTabViewModel: NSObject, ObservableObject {
     @Published var isShowingOnboardView = false
     @Published var showAlert = false
     @Published var alertItem: AlertItem?
+    // @AppStorage is a property wrapper type that reflects a value from UserDefaults
+    // and invalidates a view on a change in value in that user default.
+    @AppStorage("hasSeenOnboardView") var hasSeenOnboardView = false {
+        didSet { isShowingOnboardView = hasSeenOnboardView }
+    }
 
     // is an optional because the location services can be turned off on the phone
     var deviceLocationManager: CLLocationManager?
     let keyHasSeenOnboardView = "hasSeenOnboardView"
 
-    var hasSeenOnboardView: Bool {
-        UserDefaults.standard.bool(forKey: keyHasSeenOnboardView) // false if it isn't set
-    }
-
     func runStartupChecks() {
         if !hasSeenOnboardView {
-            isShowingOnboardView = true
-            UserDefaults.standard.set(true, forKey: keyHasSeenOnboardView)
+            hasSeenOnboardView = true
         } else {
             checkLocationServicesIsEnabled()
         }

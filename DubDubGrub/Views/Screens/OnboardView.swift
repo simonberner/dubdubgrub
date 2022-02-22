@@ -9,8 +9,6 @@ import SwiftUI
 
 struct OnboardView: View {
 
-    @Binding var isShowingOnboardView: Bool
-
     var body: some View {
         // GeometryReader: container view that defines its own size from
         // the parent (here the device screen) and gives it to its content
@@ -35,12 +33,12 @@ struct OnboardView: View {
             .frame(width: proxy.size.width, height: proxy.size.height)
             .cornerRadius(20)
             .background(Color(.systemBackground))
-            .overlay(DismissButton(isShowingView: $isShowingOnboardView), alignment: .topTrailing)
+            .overlay(DismissButton(), alignment: .topTrailing)
         }
     }
 }
 
-struct OnboardInfoView: View {
+fileprivate struct OnboardInfoView: View {
 
     var imageName: String
     var title: String
@@ -65,6 +63,6 @@ struct OnboardInfoView: View {
 
 struct OnboardView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardView(isShowingOnboardView: .constant(true))
+        OnboardView()
     }
 }

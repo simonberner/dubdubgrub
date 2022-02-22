@@ -31,6 +31,10 @@ struct AlertContext {
                                                 message: "Your phone's location services are disabled. To change that go to your phone's Settings > Privacy > Location Services",
                                                 buttonText: "OK")
 
+    static let checkedInCount = AlertItem(title: "Server Error ⚠️",
+                                                message: "Unable to get then number of people checked into each location. Please check your internet connection and try again.",
+                                                buttonText: "OK")
+
     //MARK: - ProfileView Errors
     static let invalidProfileForm = AlertItem(title: "Invalid Profile ⚠️",
                                                 message: "Profile photo and all fields are required. Your Bio must be <=100 characters.\nCheck and try again",

@@ -16,11 +16,12 @@ struct LocationMapView: View {
     @Environment(\.sizeCategory) var sizeCategory
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
+
             Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: locationManager.locations) { location in
                 MapAnnotation(coordinate: location.location.coordinate, anchorPoint: CGPoint(x: 0.5, y: 0.75)) {
                     DDGAnnotation(location: location, number: viewModel.checkedInProfiles[location.id, default: 0])
-                        .accessibility(label: Text(viewModel.createVoiceOverSummary(for: location)))
+                        .accessibilityLabel(Text(viewModel.createVoiceOverSummary(for: location)))
                         .onTapGesture {
                             // track what the user tabs
                             locationManager.selectedLocation = location
@@ -31,12 +32,7 @@ struct LocationMapView: View {
             .accentColor(.grubRed) // MARK: deprecated in future iOS versions
             .ignoresSafeArea(edges: .top)
 
-            VStack {
-                LogoView(frameWidth: 125)
-                    .shadow(radius: 10)
-//                    .accessibilityHidden(true) // hides the accessibility element
-                Spacer()
-            }
+            LogoView(frameWidth: 125).shadow(radius: 10)
         }
         .sheet(isPresented: $viewModel.isShowingDetailView) {
             NavigationView {
@@ -52,9 +48,7 @@ struct LocationMapView: View {
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
             Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
-                  } message: {
-                      Text(viewModel.alertItem?.message ?? "")
-                  }
+                  } message: { Text(viewModel.alertItem?.message ?? "") }
         .onAppear {
             // pass in a reference to the locationManager (as the view model is a class)!
             if locationManager.locations.isEmpty { viewModel.getLocations(for: locationManager) }
@@ -65,6 +59,6 @@ struct LocationMapView: View {
 
 struct LocationMapView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationMapView()
+        LocationMapView().environmentObject(LocationManager())
     }
 }

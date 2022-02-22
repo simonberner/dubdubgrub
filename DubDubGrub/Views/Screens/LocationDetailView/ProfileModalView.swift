@@ -45,7 +45,7 @@ struct ProfileModalView: View {
                 .frame(width: proxy.size.width - 60)
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(16)
-                .overlay(DismissButton(isShowingView: $isShowingProfileModalView), alignment: .topTrailing)
+                .overlay(DismissButton(), alignment: .topTrailing)
 
                 AvatarView(image: profile.getImage(for: .avatar), size: 120)
                     .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 6)
