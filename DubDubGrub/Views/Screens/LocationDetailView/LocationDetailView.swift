@@ -56,13 +56,13 @@ struct LocationDetailView: View {
                         if let _ = CloudKitManager.shared.profileRecordID {
                             Button {
                                 viewModel.updateCheckInStatus(to: viewModel.isCheckedIn ? .checkedOut : .checkedIn)
-                                playHaptic()
                             } label: {
                                 LocationActionButton(color: viewModel.isCheckedIn ? .grubRed : .brandPrimary,
                                                      imageName: viewModel.isCheckedIn ? "person.fill.xmark" : "person.fill.checkmark")
                                     .accessibilityLabel(Text(viewModel.isCheckedIn ? "Check out of location" : "Check into location"))
 
                             }
+                            .disabled(viewModel.isLoading)
                         }
                     }
                 }
@@ -96,7 +96,7 @@ struct LocationDetailView: View {
                                         .accessibilityLabel(Text("\(profile.firstName) \(profile.lastName)"))
                                         .onTapGesture {
                                             withAnimation(.easeOut(duration: 0.5)) {
-                                                viewModel.show(profile: profile, in: sizeCategory)
+                                                viewModel.show(profile, in: sizeCategory)
                                             }
                                         }
                                 }
@@ -106,8 +106,6 @@ struct LocationDetailView: View {
 
                     if viewModel.isLoading { LoadingView() }
                 }
-
-                Spacer()
             }
             // if the profile modal view is showing: hide all the stuff in the VStack from system accessibility
             .accessibilityHidden(viewModel.isShowingProfileModalView)
@@ -149,7 +147,7 @@ struct LocationDetailView: View {
 
 // as long this button is only used inside this view, it
 // can stay here
-struct LocationActionButton: View {
+fileprivate struct LocationActionButton: View {
     
     var color: Color
     var imageName: String
@@ -168,7 +166,7 @@ struct LocationActionButton: View {
     }
 }
 
-struct FirstNameAvatarView: View {
+fileprivate struct FirstNameAvatarView: View {
 
     @Environment(\.sizeCategory) var sizeCategory
     var profile: DDGProfile
@@ -185,7 +183,7 @@ struct FirstNameAvatarView: View {
     }
 }
 
-struct BannerImageView: View {
+fileprivate struct BannerImageView: View {
     
     var image: UIImage
     
@@ -198,7 +196,7 @@ struct BannerImageView: View {
     }
 }
 
-struct AddressView: View {
+fileprivate struct AddressView: View {
     
     var address: String
     
@@ -209,7 +207,7 @@ struct AddressView: View {
     }
 }
 
-struct DescriptionView: View {
+fileprivate struct DescriptionView: View {
     
     var text: String
     
@@ -221,7 +219,7 @@ struct DescriptionView: View {
     }
 }
 
-struct LocationDetailView_Previews: PreviewProvider {
+fileprivate struct LocationDetailView_Previews: PreviewProvider {
     static var previews: some View {
         // Tip: Put the Preview into a NavigationView to see how it looks like
         NavigationView {

@@ -14,10 +14,10 @@ extension View {
         self.modifier(ProfileViewText())
     }
 
-    func playHaptic() {
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
-    }
+//    func playHaptic() {
+//        let generator = UINotificationFeedbackGenerator()
+//        generator.notificationOccurred(.success)
+//    }
 
     func embedInScrollView() -> some View {
         GeometryReader { geometry in

@@ -89,6 +89,8 @@ final class LocationDetailViewModel: ObservableObject {
             alertItem = AlertContext.unableToGetProfile
             return
         }
+
+        showLoadingView()
         CloudKitManager.shared.fetchRecord(with: profileRecordID) { [self] result in
             switch result {
             case .success(let record):
@@ -105,8 +107,10 @@ final class LocationDetailViewModel: ObservableObject {
                 // Save the updated profile to CloudKit
                 CloudKitManager.shared.save(record: record) { result in
                     DispatchQueue.main.async {
+                        hideLoadingView()
                         switch result {
                         case .success(let record):
+                            HapticManager.playSuccess()
                             let profile = DDGProfile(record: record)
                             switch checkInStatus {
                             case .checkedIn:
@@ -118,8 +122,7 @@ final class LocationDetailViewModel: ObservableObject {
                                 Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedOut successfully")
                             }
 
-                            isCheckedIn = checkInStatus == .checkedIn
-//                            isCheckedIn = !isCheckedIn (less readable for me)
+                            isCheckedIn.toggle()
 
                         case .failure(_):
                             showAlert = true
@@ -130,6 +133,7 @@ final class LocationDetailViewModel: ObservableObject {
                 }
 
             case .failure(_):
+                hideLoadingView()
                 showAlert = true
                 alertItem = AlertContext.checkInOutFailed
                 Logger.locationDetailViewModel.info("❌ Error fetching record")
@@ -156,7 +160,7 @@ final class LocationDetailViewModel: ObservableObject {
         }
     }
 
-    func show(profile: DDGProfile, in sizeCategory: ContentSizeCategory) {
+    func show(_ profile: DDGProfile, in sizeCategory: ContentSizeCategory) {
         selectedProfile = profile
         if sizeCategory >= .accessibilityMedium {
             isShowingProfileModalSheet = true
