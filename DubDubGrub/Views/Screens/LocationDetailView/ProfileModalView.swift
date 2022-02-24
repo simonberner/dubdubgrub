@@ -53,6 +53,8 @@ struct ProfileModalView: View {
                     .accessibility(hidden: true)
             }
         }
+        .transition(.opacity.combined(with: .scale))
+        .zIndex(2)
     }
 }
 
