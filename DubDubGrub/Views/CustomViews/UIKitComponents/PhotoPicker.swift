@@ -43,7 +43,8 @@ struct PhotoPicker: UIViewControllerRepresentable {
                 photoPicker.image = image // keeping the raw image
             }
             // dismiss the 'Choose' PhotoPicker view
-            photoPicker.presentationMode.wrappedValue.dismiss()
+            picker.dismiss(animated: true)
+//            photoPicker.presentationMode.wrappedValue.dismiss()
         }
 
     }
