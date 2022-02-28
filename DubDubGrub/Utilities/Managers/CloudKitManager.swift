@@ -20,7 +20,7 @@ final class CloudKitManager {
      */
     static let shared = CloudKitManager()
 
-    // Noone can initialize
+    // No-one can initialize
     private init() {}
 
     var userRecord: CKRecord?
@@ -42,7 +42,7 @@ final class CloudKitManager {
 
             CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
                 guard let userRecord = userRecord, error == nil else {
-                    Logger.profileView.error("Fetching UserRecord failed: \(error!.localizedDescription)")
+                    Logger.cloudKitManager.error("Fetching UserRecord failed: \(error!.localizedDescription)")
                     return
                 }
 
@@ -76,18 +76,13 @@ final class CloudKitManager {
         // - an array of 'records' or
         // - an 'error'
         CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
-            // make sure error is nil before we move on
-            guard error == nil else {
+            guard let records = records, error == nil else {
                 completed(.failure(error!))
                 return
             }
 
-            // if records is nil, return
-            guard let records = records else { return }
-
             // when we have records
-            let locations = records.map { $0.convertToDDGLocation() } // shorthand parameter syntax
-
+            let locations = records.map(DDGLocation.init)
             // pass up the locations
             completed(.success(locations))
         }
@@ -112,7 +107,7 @@ final class CloudKitManager {
                 completed(.failure(error!))
                 return
             }
-            let profiles = records.map { $0.convertToDDGProfile() }
+            let profiles = records.map(DDGProfile.init) // initialize a DDProfile from each record
             // pass up all the checkedIn profiles (as a DDGProfile Array)
             completed(.success(profiles))
         }
@@ -125,7 +120,10 @@ final class CloudKitManager {
      - Returns: A completion handler with the Result containing a dictionary [DDGLocation : [DDGProfile]]
      */
     func getCheckedInProfilesDictionary(completed: @escaping (Result<[CKRecord.ID : [DDGProfile]], Error>) -> Void) {
+        Logger.cloudKitManager.info("✅ Network call fired off")
+        // set the filter
         let predicate = NSPredicate(format: "isCheckedInNilCheck == 1")
+        // create the query with the above filter
         let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
         // CKQueryOperation: we get back 2 closures:
         // - first closure feeds us the records as they are being downloaded
@@ -133,6 +131,7 @@ final class CloudKitManager {
         let operation = CKQueryOperation(query: query) // by using CKQueryOperation we get only the keys back we actually want
 //        operation.desiredKeys = [DDGProfile.kIsCheckedIn, DDGProfile.kAvatar] // we could just download the isCheckedIn reference and the avatar
         // the cost of downloading everything from all the users is in our context with that data negligible.
+//        operation.resultsLimit = 1 // For Testing only here: the maximum number of records to return at one time.
 
         // Build dictionary
         var checkedInProfiles: [CKRecord.ID : [DDGProfile]] = [:]
@@ -143,7 +142,8 @@ final class CloudKitManager {
             let profile = DDGProfile(record: record)
 
             // check what the referenceId is (that is the location where that profile is checked-in to)
-            guard let locationReference = profile.isCheckedIn else { return }
+//            guard let locationReference = profile.isCheckedIn else { return }
+            guard let locationReference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
 
             // in the dictionary: (17:10)
             // Go ahead and look for the key of this location recordId, when an array of DDGProfile exists at that recordId,
@@ -153,19 +153,74 @@ final class CloudKitManager {
         }
 
         // The closure to execute after CloudKit retrieves all of the records.
+        // cursor: as long as there are more records available in CK, the cursor will have a value
+        operation.queryCompletionBlock = { cursor, error in
+            guard error == nil else {
+                completed(.failure(error!))
+                return
+            }
+            // (cursor for pagination: you pass in the cursor to a next query so that it knows where to start querying the record
+            if let cursor = cursor {
+                Logger.cloudKitManager.info("1️⃣ Initial cursor is not nil - \(cursor.debugDescription)")
+                Logger.cloudKitManager.info("👩‍👩‍👦‍👦 Current Dictionary - \(checkedInProfiles)")
+                self.continueWithCheckedInProfileDict(cursor: cursor, dictionary: checkedInProfiles) { result in
+                    switch result {
+                        case .success(let profiles):
+                            Logger.cloudKitManager.info("👍🏼1️⃣ Initial Cursor Success - Dictionary - \(profiles)")
+                            completed(.success(profiles))
+                        case .failure(let error):
+                            Logger.cloudKitManager.info("❌1️⃣ Initial Error \(error.localizedDescription)")
+                            completed(.failure(error))
+                    }
+                }
+            } else {
+                completed(.success(checkedInProfiles))
+            }
+        }
+
+        // run the operation
+        CKContainer.default().publicCloudDatabase.add(operation)
+    }
+
+    private func continueWithCheckedInProfileDict(cursor: CKQueryOperation.Cursor,
+                                                  dictionary: [CKRecord.ID: [DDGProfile]],
+                                                  completed: @escaping (Result<[CKRecord.ID: [DDGProfile]], Error>) -> Void) {
+        Logger.cloudKitManager.info("✅ Network call fired off")
+
+        var checkedInProfiles = dictionary
+        let operation = CKQueryOperation(cursor: cursor)
+//        operation.resultsLimit = 1 // For Testing only here: the maximum number of records to return at one time.
+
+        operation.recordFetchedBlock = { record in
+            let profile = DDGProfile(record: record)
+            guard let locationReference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
+            checkedInProfiles[locationReference.recordID, default: []].append(profile)
+        }
+
         operation.queryCompletionBlock = { cursor, error in
             guard error == nil else {
                 completed(.failure(error!))
                 return
             }
 
-            // TODO: handle cursor later on
-            // (cursor for pagination: you pass in the cursor to a next query so that it knows where to start querying the record
-
-            completed(.success(checkedInProfiles))
+            if let cursor = cursor {
+                Logger.cloudKitManager.info("⭕️ Recursive cursor is not nil - \(cursor.debugDescription)")
+                Logger.cloudKitManager.info("👩‍👩‍👦‍👦 Current Dictionary - \(checkedInProfiles)")
+                self.continueWithCheckedInProfileDict(cursor: cursor, dictionary: checkedInProfiles) { result in
+                    switch result {
+                        case .success(let profiles):
+                            Logger.cloudKitManager.info("👍🏼⭕️ Recursive Success - Dictionary - \(profiles)")
+                            completed(.success(profiles))
+                        case .failure(let error):
+                            Logger.cloudKitManager.info("❌⭕️ Recursive Error \(error.localizedDescription)")
+                            completed(.failure(error))
+                    }
+                }
+            } else {
+                completed(.success(checkedInProfiles))
+            }
         }
 
-        // run the operation
         CKContainer.default().publicCloudDatabase.add(operation)
     }
 
@@ -235,7 +290,7 @@ final class CloudKitManager {
         // (if it was successful we get savedRecords back or deletedRecords which we ignore here, otherwise an error)
         operation.modifyRecordsCompletionBlock = { savedRecords, _, error in
             guard let savedRecords = savedRecords, error == nil else {
-                Logger.profileView.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
+                Logger.cloudKitManager.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
                 completed(.failure(error!))
                 return
             }

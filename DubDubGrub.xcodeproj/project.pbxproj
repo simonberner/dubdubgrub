@@ -36,7 +36,6 @@
 		15D0FEA92784B88E009EF141 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D0FEA82784B88E009EF141 /* AlertItem.swift */; };
 		15D325A92780E8490007FD17 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D325A82780E8490007FD17 /* CloudKitManager.swift */; };
 		15D325AB2781C51E0007FD17 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D325AA2781C51E0007FD17 /* Constants.swift */; };
-		15D325AD278232C30007FD17 /* CKRecord+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D325AC278232C30007FD17 /* CKRecord+Ext.swift */; };
 		15D3267027986EA3002437E2 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D3266F27986EA3002437E2 /* LoadingView.swift */; };
 		15DB7C4527860D3A00BEC16F /* LocationMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DB7C4427860D3A00BEC16F /* LocationMapViewModel.swift */; };
 		15F6FC6827904FC400FC2C67 /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F6FC6727904FC400FC2C67 /* DismissButton.swift */; };
@@ -101,7 +100,6 @@
 		15D0FEA82784B88E009EF141 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		15D325A82780E8490007FD17 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		15D325AA2781C51E0007FD17 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		15D325AC278232C30007FD17 /* CKRecord+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Ext.swift"; sourceTree = "<group>"; };
 		15D3266F27986EA3002437E2 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		15D4204027BABCE600086778 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		15DB7C4427860D3A00BEC16F /* LocationMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapViewModel.swift; sourceTree = "<group>"; };
@@ -363,7 +361,6 @@
 			children = (
 				15FB054A2770A7470036A003 /* Color+Ext.swift */,
 				152F3E2D277BA8380074D2B1 /* View+Ext.swift */,
-				15D325AC278232C30007FD17 /* CKRecord+Ext.swift */,
 				154C120A2782F6370015B7E4 /* Logger+Ext.swift */,
 				1596BE63278C6D3D0001D2BE /* CKAsset+Ext.swift */,
 				155808E2279497D8007443A6 /* UIImage+Ext.swift */,
@@ -544,7 +541,6 @@
 				151FEEB62791CAE200A85A8C /* PhotoPicker.swift in Sources */,
 				155808E3279497D8007443A6 /* UIImage+Ext.swift in Sources */,
 				15D3267027986EA3002437E2 /* LoadingView.swift in Sources */,
-				15D325AD278232C30007FD17 /* CKRecord+Ext.swift in Sources */,
 				159B6B8C278F75AC007A4912 /* LogoView.swift in Sources */,
 				159050AE27A3FD49004AB387 /* LocationListViewModel.swift in Sources */,
 				152F3E30277BAB600074D2B1 /* DDGButton.swift in Sources */,

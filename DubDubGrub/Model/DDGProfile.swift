@@ -26,7 +26,6 @@ struct DDGProfile: Identifiable {
     let avatar: CKAsset! //implicitly unwrapping of the optional (handling the nil case later on with a default image asset)
     let companyName: String
     let bio: String
-    let isCheckedIn: CKRecord.Reference?
 
     // creating our own initializer because we get a CKRecord back when querying CloudKit database
     init(record: CKRecord) {
@@ -36,7 +35,6 @@ struct DDGProfile: Identifiable {
         avatar = record[DDGProfile.kAvatar] as? CKAsset
         companyName = record[DDGProfile.kCompanyName] as? String ?? "N/A"
         bio = record[DDGProfile.kBio] as? String ?? "N/A"
-        isCheckedIn = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference
     }
 
     func getImage(for dimension: ImageDimension) -> UIImage {

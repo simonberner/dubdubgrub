@@ -19,7 +19,7 @@ extension LocationListView {
 
         func getCheckedInProfilesDictionary() {
             CloudKitManager.shared.getCheckedInProfilesDictionary { result in
-                DispatchQueue.main.async { [self] in
+                DispatchQueue.main.async { [self] in // self: the CloudKitManager is pointing to the LocationListViewModel
                     switch result {
                     case .success(let checkedInProfiles):
                         self.checkedInProfiles = checkedInProfiles
