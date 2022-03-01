@@ -10,8 +10,6 @@ import SwiftUI
 struct PhotoPicker: UIViewControllerRepresentable {
 
     @Binding var image: UIImage
-    @Environment(\.presentationMode) var presentationMode // https://developer.apple.com/documentation/swiftui/environment
-    
 
     // gets called automatically when we use the PhotoPicker
     func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -44,7 +42,6 @@ struct PhotoPicker: UIViewControllerRepresentable {
             }
             // dismiss the 'Choose' PhotoPicker view
             picker.dismiss(animated: true)
-//            photoPicker.presentationMode.wrappedValue.dismiss()
         }
 
     }

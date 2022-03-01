@@ -29,8 +29,8 @@ final class LocationDetailViewModel: ObservableObject {
 
     init(location: DDGLocation) { self.location = location }
 
-    func getColumns(for sizeCategory: ContentSizeCategory) -> [GridItem] {
-        let numberOfColumns = sizeCategory >= .accessibilityMedium ? 1 : 3
+    func getColumns(for dynamicTypeSize: DynamicTypeSize) -> [GridItem] {
+        let numberOfColumns = dynamicTypeSize >= .accessibility3 ? 1 : 3
         return Array(repeating: GridItem(.flexible()), count: numberOfColumns)
     }
 
@@ -163,9 +163,9 @@ final class LocationDetailViewModel: ObservableObject {
         }
     }
 
-    func show(_ profile: DDGProfile, in sizeCategory: ContentSizeCategory) {
+    func show(_ profile: DDGProfile, in dynamicTypeSize: DynamicTypeSize) {
         selectedProfile = profile
-        if sizeCategory >= .accessibilityMedium {
+        if dynamicTypeSize >= .accessibility3 {
             isShowingProfileModalSheet = true
         } else {
             isShowingProfileModalView = true

@@ -13,7 +13,7 @@ struct LocationMapView: View {
 
     @EnvironmentObject private var locationManager: LocationManager
     @StateObject private var viewModel = LocationMapViewModel()
-    @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -29,7 +29,8 @@ struct LocationMapView: View {
                         }
                 }
             }
-            .accentColor(.grubRed) // MARK: deprecated in future iOS versions
+//            .tint(.grubRed) MARK: seems not to work yet!
+            .accentColor(.grubRed)
             .ignoresSafeArea(edges: .top)
 
             LogoView(frameWidth: 125).shadow(radius: 10)
@@ -38,10 +39,8 @@ struct LocationMapView: View {
             NavigationView {
                 // closure the returns the content of the sheet
                 // force unwrap? -> it is safe because onTapGesture a location is assigned to that property
-                viewModel.createLocationDetailView(for: locationManager.selectedLocation!, in: sizeCategory)
+                viewModel.createLocationDetailView(for: locationManager.selectedLocation!, in: dynamicTypeSize)
                     .toolbar { Button("Dismiss") { viewModel.isShowingDetailView = false }
-                        .accentColor(.brandPrimary) // or use
-//                        .foregroundColor(.brandPrimary)
                     }
             }
         }

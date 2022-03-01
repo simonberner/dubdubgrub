@@ -52,6 +52,6 @@ struct ProfileSheetView: View {
 struct ProfileSheetView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileSheetView(profile: DDGProfile(record: MockData.profile))
-            .environment(\.sizeCategory, .accessibilityExtraExtraLarge)
+            .environment(\.dynamicTypeSize, .accessibility5)
     }
 }

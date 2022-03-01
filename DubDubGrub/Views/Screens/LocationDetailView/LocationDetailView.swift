@@ -42,7 +42,6 @@ struct LocationDetailView: View {
                 ProfileSheetView(profile: viewModel.selectedProfile!)
                     .toolbar { Button("Dismiss") { viewModel.isShowingProfileModalSheet = false } }
             }
-            .accentColor(.brandPrimary)
         }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
@@ -78,12 +77,12 @@ fileprivate struct LocationActionButton: View {
 
 fileprivate struct FirstNameAvatarView: View {
 
-    @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     var profile: DDGProfile
     
     var body: some View {
         VStack {
-            AvatarView(image: profile.getImage(for: .avatar), size: sizeCategory >= .accessibilityMedium ? 100 : 64)
+            AvatarView(image: profile.getImage(for: .avatar), size: dynamicTypeSize >= .accessibility3 ? 100 : 64)
             
             Text(profile.firstName)
                 .bold()
@@ -200,7 +199,7 @@ fileprivate struct GridHeaderTextView: View {
 fileprivate struct AvatarGridView: View {
 
     @ObservedObject var viewModel: LocationDetailViewModel
-    @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     var body: some View {
         ZStack {
@@ -209,12 +208,12 @@ fileprivate struct AvatarGridView: View {
             } else {
                 ScrollView {
                     // only 10 views can be placed in the grid?
-                    LazyVGrid(columns: viewModel.getColumns(for: sizeCategory), content: {
+                    LazyVGrid(columns: viewModel.getColumns(for: dynamicTypeSize), content: {
                         ForEach(viewModel.checkedInProfiles) { profile in
                             FirstNameAvatarView(profile: profile)
                                 .onTapGesture {
                                     withAnimation(.easeOut(duration: 0.5)) {
-                                        viewModel.show(profile, in: sizeCategory)
+                                        viewModel.show(profile, in: dynamicTypeSize)
                                     }
                                 }
                         }
@@ -258,7 +257,7 @@ struct LocationDetailView_Previews: PreviewProvider {
             LocationDetailView(viewModel: LocationDetailViewModel(location: DDGLocation(record: MockData.chipotle)))
         }
         .preferredColorScheme(.dark)
-        .environment(\.sizeCategory, .extraExtraExtraLarge)
+        .environment(\.dynamicTypeSize, .accessibility4)
 
         NavigationView {
             LocationDetailView(viewModel: LocationDetailViewModel(location: DDGLocation(record: MockData.chipotle))).embedInScrollView()
