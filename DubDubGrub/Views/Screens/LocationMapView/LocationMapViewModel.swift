@@ -14,7 +14,7 @@ import SwiftUI
 extension LocationMapView {
 
     // ObservableObject: others can observe instances of this class
-    final class LocationMapViewModel: ObservableObject {
+    final class LocationMapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 
         @Published var checkedInProfiles: [CKRecord.ID: Int] = [:]
         @Published var isShowingDetailView = false
@@ -26,6 +26,33 @@ extension LocationMapView {
                                                                                   longitude: -121.891054),
                                                    span: MKCoordinateSpan(latitudeDelta: 0.01,
                                                                           longitudeDelta: 0.01))
+
+        var deviceLocationAManager = CLLocationManager()
+
+        override init() {
+            super.init()
+            deviceLocationAManager.delegate = self
+        }
+
+        func requestAllowOnceLocationPermission() {
+            deviceLocationAManager.requestLocation()
+        }
+
+        // the .requestLocation above triggers this
+        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+            guard let currentLocation = locations.last else { return }
+
+            withAnimation {
+                region = MKCoordinateRegion(center: currentLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            }
+        }
+
+        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+            showAlert = true
+            alertItem = AlertContext.didFailOnLocationManager
+            Logger.locationMapViewModel.error("locationManager failed: \(error.localizedDescription)")
+        }
 
         /*
          The getLocations() call can be put here. This way you can omit the .onAppear in the View.

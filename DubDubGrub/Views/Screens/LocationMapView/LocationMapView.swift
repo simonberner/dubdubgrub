@@ -5,6 +5,7 @@
 //  Created by Simon Berner on 20.12.21.
 //
 
+import CoreLocationUI
 import SwiftUI
 import MapKit
 import OSLog
@@ -34,6 +35,8 @@ struct LocationMapView: View {
             .ignoresSafeArea(edges: .top)
 
             LogoView(frameWidth: 125).shadow(radius: 10)
+
+
         }
         .sheet(isPresented: $viewModel.isShowingDetailView) {
             NavigationView {
@@ -43,6 +46,17 @@ struct LocationMapView: View {
                     .toolbar { Button("Dismiss") { viewModel.isShowingDetailView = false }
                     }
             }
+        }
+        .overlay(alignment: .bottomLeading) {
+            LocationButton(.currentLocation) {
+                viewModel.requestAllowOnceLocationPermission()
+            }
+            .foregroundColor(.white)
+            .symbolVariant(.fill)
+            .tint(.grubRed)
+            .labelStyle(.iconOnly)
+            .clipShape(Circle())
+            .padding(EdgeInsets(top: 0, leading: 20, bottom: 40, trailing: 0))
         }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {

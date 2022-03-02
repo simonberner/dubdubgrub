@@ -82,4 +82,9 @@ struct AlertContext {
     static let unableToGetAllCheckedInProfiles = AlertItem(title: "Server Error ⚠️",
                                                 message: "We are currently unable to get all the users checked into the locations.\nPlease try again later.",
                                                 buttonText: "OK")
+
+    //MARK: LocationMapViewModel
+    static let didFailOnLocationManager = AlertItem(title: "Location Error ⚠️",
+                                                message: "We are currently unable to get all the users checked into the locations.\nPlease try again later.",
+                                                buttonText: "OK")
 }
