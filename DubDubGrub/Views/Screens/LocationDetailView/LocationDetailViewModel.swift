@@ -10,7 +10,7 @@ import MapKit
 import CloudKit
 import OSLog
 
-final class LocationDetailViewModel: ObservableObject {
+@MainActor final class LocationDetailViewModel: ObservableObject {
 
 
     @Published var alertItem: AlertItem?
@@ -146,19 +146,16 @@ final class LocationDetailViewModel: ObservableObject {
 
     func getCheckedInProfiles() {
         showLoadingView()
-        CloudKitManager.shared.getCheckedInProfiles(for: location.id) { result in
-            DispatchQueue.main.async { [self] in
-                switch result {
-                case .success(let profiles):
-                    // update the Array of checkedIn profiles
-                    checkedInProfiles = profiles
-                case .failure(let error):
-                    // show alert
-                    showAlert = true
-                    alertItem = AlertContext.unableToGetCheckedInProfiles
-                    Logger.locationDetailViewModel.error("getCheckedInProfiles failed! \(error.localizedDescription)")
-                }
+
+        Task {
+            do {
+                checkedInProfiles = try await CloudKitManager.shared.getCheckedInProfiles(for: location.id)
                 hideLoadingView()
+            } catch {
+                hideLoadingView()
+                showAlert = true
+                alertItem = AlertContext.unableToGetCheckedInProfiles
+                Logger.locationDetailViewModel.error("getCheckedInProfiles failed! \(error.localizedDescription)")
             }
         }
     }

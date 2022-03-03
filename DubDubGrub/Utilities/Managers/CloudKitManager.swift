@@ -25,6 +25,31 @@ final class CloudKitManager {
 
     var userRecord: CKRecord?
     var profileRecordID: CKRecord.ID?
+    let container = CKContainer.default()
+
+//    func getUserRecord() {
+//        CKContainer.default().fetchUserRecordID { recordID, error in
+//            guard let recordID = recordID, error == nil else {
+//                Logger.cloudKitManager.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
+//                return
+//            }
+//
+//            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
+//                guard let userRecord = userRecord, error == nil else {
+//                    Logger.cloudKitManager.error("Fetching UserRecord failed: \(error!.localizedDescription)")
+//                    return
+//                }
+//
+//                self.userRecord = userRecord
+//                Logger.cloudKitManager.info("getUserRecord: \(self.userRecord.debugDescription)")
+//
+//                // Does the userRecord has a reference to a userProfile?
+//                if let profileReference = userRecord["userProfile"] as? CKRecord.Reference {
+//                    self.profileRecordID = profileReference.recordID // is nil when a user isn't logged in (in iCloud)
+//                }
+//            }
+//        }
+//    }
 
     /**
      Get the userRecord of the current signed in iCloud user and store it in the instance property userRecord.
@@ -33,60 +58,60 @@ final class CloudKitManager {
      This func gets called when the App starts (with the rendering of AppTabView). A user does not  have to be logged in,
      if she just wants to see who is checked in at which location.
      */
-    func getUserRecord() {
-        CKContainer.default().fetchUserRecordID { recordID, error in
-            guard let recordID = recordID, error == nil else {
-                Logger.cloudKitManager.error("Fetching user recordID \(recordID.debugDescription) failed: \(error!.localizedDescription)")
-                return
-            }
+    func getUserRecord() async throws {
+        let recordID = try await container.userRecordID()
+        let record = try await container.publicCloudDatabase.record(for: recordID)
+        userRecord = record
+        Logger.cloudKitManager.info("getUserRecord: \(self.userRecord.debugDescription)")
 
-            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
-                guard let userRecord = userRecord, error == nil else {
-                    Logger.cloudKitManager.error("Fetching UserRecord failed: \(error!.localizedDescription)")
-                    return
-                }
-
-                self.userRecord = userRecord
-                Logger.cloudKitManager.info("getUserRecord: \(self.userRecord.debugDescription)")
-
-                // Does the userRecord has a reference to a userProfile?
-                if let profileReference = userRecord["userProfile"] as? CKRecord.Reference {
-                    self.profileRecordID = profileReference.recordID // is nil when a user isn't logged in (in iCloud)
-                }
-            }
+        // Does the userRecord has a reference to a userProfile?
+        if let profileReference = record["userProfile"] as? CKRecord.Reference {
+            profileRecordID = profileReference.recordID // is nil when a user isn't logged in (in iCloud)
         }
     }
+
+//    func getLocations(completed: @escaping (Result <[DDGLocation], Error>) -> Void) {
+//        // sort by location name
+//        let alphabeticalSort = NSSortDescriptor(key: DDGLocation.kName, ascending: true)
+//        // taking baby-steps before using CKQueryOperation:
+//        // using the convenience api for doing the basic call to CloudKit
+//        // NSPredicate: give back everything that is a DDGLocation
+//        let query = CKQuery(recordType: RecordType.location, predicate: NSPredicate(value: true))
+//        query.sortDescriptors = [alphabeticalSort]
+//
+//        // request to CloudKit
+//        // we get back 2 optional objects from that call:
+//        // - an array of 'records' or
+//        // - an 'error'
+//        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
+//            guard let records = records, error == nil else {
+//                completed(.failure(error!))
+//                return
+//            }
+//
+//            // when we have records
+//            let locations = records.map(DDGLocation.init)
+//            // pass up the locations
+//            completed(.success(locations))
+//        }
+//    }
 
     /**
      Get all available locations where users can visit
 
      - Returns: A completion handler containing an array with all the locations available in the CloudKit database
      */
-    func getLocations(completed: @escaping (Result <[DDGLocation], Error>) -> Void) {
+    func getLocations() async throws -> [DDGLocation] {
         // sort by location name
         let alphabeticalSort = NSSortDescriptor(key: DDGLocation.kName, ascending: true)
-        // taking baby-steps before using CKQueryOperation:
-        // using the convenience api for doing the basic call to CloudKit
         // NSPredicate: give back everything that is a DDGLocation
         let query = CKQuery(recordType: RecordType.location, predicate: NSPredicate(value: true))
         query.sortDescriptors = [alphabeticalSort]
 
-        // request to CloudKit
-        // we get back 2 optional objects from that call:
-        // - an array of 'records' or
-        // - an 'error'
-        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let records = records, error == nil else {
-                completed(.failure(error!))
-                return
-            }
-
-            // when we have records
-            let locations = records.map(DDGLocation.init)
-            // pass up the locations
-            completed(.success(locations))
-        }
-    }
+        let (matchResults, _) = try await container.publicCloudDatabase.records(matching: query)
+        let records = matchResults.compactMap { _, result in try? result.get()} // compactMap filters out the nils
+        return records.map(DDGLocation.init)
+}
 
     /**
      Get the currently checked-in user profiles for an individual location
@@ -94,7 +119,7 @@ final class CloudKitManager {
      - Parameter locationID: The locationID to get the checkedIn profiles for
      - Returns: A completion handler with the Result<[DDGProfiles], Error> (where [DDGProfile] is an Array containing the checkedIn profiles for this location)
      */
-    func getCheckedInProfiles(for locationID: CKRecord.ID, completed: @escaping (Result<[DDGProfile], Error>) -> Void) {
+    func getCheckedInProfiles(for locationID: CKRecord.ID) async throws -> [DDGProfile] {
         // CKReferences - Back pointers
         let reference = CKRecord.Reference(recordID: locationID, action: .none)
         // any DDGProfile who's 'isCheckedIn' property is equals to the 'reference'
@@ -102,15 +127,9 @@ final class CloudKitManager {
         let predicate = NSPredicate(format: "isCheckedIn == %@", reference)
         let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
 
-        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let records = records, error == nil else {
-                completed(.failure(error!))
-                return
-            }
-            let profiles = records.map(DDGProfile.init) // initialize a DDProfile from each record
-            // pass up all the checkedIn profiles (as a DDGProfile Array)
-            completed(.success(profiles))
-        }
+        let (matchResults, _) = try await container.publicCloudDatabase.records(matching: query)
+        let records = matchResults.compactMap { _, result in try? result.get() }
+        return records.map(DDGProfile.init)
     }
 
     /**

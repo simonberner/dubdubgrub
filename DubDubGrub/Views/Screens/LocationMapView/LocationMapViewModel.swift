@@ -14,7 +14,8 @@ import SwiftUI
 extension LocationMapView {
 
     // ObservableObject: others can observe instances of this class
-    final class LocationMapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+    // @MainActor: Any UI update in this class will be rerouted to the main queue/thread
+    @MainActor final class LocationMapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 
         @Published var checkedInProfiles: [CKRecord.ID: Int] = [:]
         @Published var isShowingDetailView = false
@@ -62,20 +63,14 @@ extension LocationMapView {
         //        getLocations()
         //    }
 
-        // @MainActor: Anything in this method will be rerouted to the main (UI) queue/thread
-        @MainActor func getLocations(for locationManager: LocationManager) {
-            CloudKitManager.shared.getLocations { [self] result in
-                Task {
-                    switch result {
-                        // getting back an array of locations
-                    case .success(let locations):
-                        locationManager.locations = locations
-                        Logger.locationMapViewModel.info("\(locations)")
-                    case .failure(let error):
-                        alertItem = AlertContext.unableToGetLocations
-                        showAlert = true
-                        Logger.locationMapViewModel.error("getLocations: \(error.localizedDescription)")
-                    }
+        func getLocations(for locationManager: LocationManager) {
+            Task {
+                do {
+                    locationManager.locations = try await CloudKitManager.shared.getLocations()
+                } catch {
+                    alertItem = AlertContext.unableToGetLocations
+                    showAlert = true
+                    Logger.locationMapViewModel.error("getLocations: \(error.localizedDescription)")
                 }
             }
         }

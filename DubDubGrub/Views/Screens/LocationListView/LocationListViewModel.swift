@@ -12,7 +12,7 @@ import SwiftUI
 
 extension LocationListView {
 
-    final class LocationListViewModel: ObservableObject {
+    @MainActor final class LocationListViewModel: ObservableObject {
         @Published var checkedInProfiles: [CKRecord.ID : [DDGProfile]] = [:]
         @Published var alertItem: AlertItem?
         @Published var showAlert = false

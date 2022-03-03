@@ -23,8 +23,8 @@ struct AppTabView: View {
             .tabItem { Label("Profile", systemImage: "person") }
 
         }
-        .onAppear {
-            CloudKitManager.shared.getUserRecord()
+        .task { // cancels the network call automatically when the user navigates away from the view
+            try? await CloudKitManager.shared.getUserRecord() // try? -> just nil in case of an error
             viewModel.checkIfHasSeenOnboardView()
         }
         .sheet(isPresented: $viewModel.isShowingOnboardView) {
