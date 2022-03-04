@@ -108,13 +108,13 @@ struct ProfileView: View {
                 }
             }
         }
-        .onAppear(perform: {
+        .task {
             // We call this func everytime the Profile view is tapped. This is good enough for an MVP
             // and we don't go any deeper down the rabbit hole do find a better solution (eg. a CK
             // subscription to the profile data)
             viewModel.getProfile()
             viewModel.getCheckedInStatus()
-        })
+        }
         .alert(Text(viewModel.alertItem?.title ?? ""),
                isPresented: $viewModel.showAlert) {
             Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }

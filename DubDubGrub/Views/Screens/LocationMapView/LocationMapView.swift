@@ -62,7 +62,7 @@ struct LocationMapView: View {
                isPresented: $viewModel.showAlert) {
             Button(viewModel.alertItem?.buttonText ?? "", role: .cancel) { }
                   } message: { Text(viewModel.alertItem?.message ?? "") }
-        .onAppear {
+        .task {
             // pass in a reference to the locationManager (as the view model is a class)!
             if locationManager.locations.isEmpty { viewModel.getLocations(for: locationManager) }
             viewModel.getCheckedInCounts()
