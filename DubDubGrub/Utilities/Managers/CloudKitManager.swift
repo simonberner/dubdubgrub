@@ -149,7 +149,7 @@ final class CloudKitManager {
         // Initialize empty dictionary
         var checkedInProfiles: [CKRecord.ID : [DDGProfile]] = [:]
 
-        let (matchResults, cursor) = try await container.publicCloudDatabase.records(matching: query, resultsLimit: 1)
+        let (matchResults, cursor) = try await container.publicCloudDatabase.records(matching: query)
         let records = matchResults.compactMap { _, result in try? result.get() }
 
         // iterate through the array and build the dictionary
@@ -185,7 +185,7 @@ final class CloudKitManager {
 
         var checkedInProfiles = dictionary
 
-        let (matchResults, cursor) = try await container.publicCloudDatabase.records(continuingMatchFrom: cursor, resultsLimit: 1)
+        let (matchResults, cursor) = try await container.publicCloudDatabase.records(continuingMatchFrom: cursor)
         // in the matchResults ignore the recordID and try to get the record from a result
         // if a record has an error, return nil and the compactMap will filter out the nil and
         // finally provide a clean array of records
