@@ -1,4 +1,4 @@
-# Dub Dub Grub - 2022 - WORK IN PROGRESS
+# Dub Dub Grub - 2022
 Dub Dub Grub (a course by Sean Allen) is my current work in progress project for taking the next (more advanced) steps in learning Swift and SwiftUI.
 It is a exploration of the frameworks *CloudKit* and *MapKit*.
 
@@ -27,13 +27,17 @@ exactly happens with each line of code I am writing. I am on the same side as Se
 refactor it to make the code pretty 😁
 
 ## Screens
-Coming soon...
+![DubDubGrub](DubDubGrub/Screenshots/Onboard.png)
+![DubDubGrub](DubDubGrub/Screenshots/MapOverview.png)
+![DubDubGrub](DubDubGrub/Screenshots/GrubSpots.png)
+![DubDubGrub](DubDubGrub/Screenshots/LocationDetail.png)
+![DubDubGrub](DubDubGrub/Screenshots/Profile.png)
+
+## Test Flight
+Not planned (yet)
 
 ## App Store
 This app won't be available in the App Store.
-
-## Test Flight
-Coming soon...
 
 ## Used Technologies
 - Swift 5.5
@@ -41,6 +45,7 @@ Coming soon...
 - [CloudKit](https://developer.apple.com/icloud/cloudkit/)
 - [MapKit](https://developer.apple.com/documentation/mapkit)
 - [CoreLocation](https://developer.apple.com/documentation/corelocation)
+- [Async/Await](https://www.avanderlee.com/swift/async-await/)
 - OSLog
 - [Async await](https://www.hackingwithswift.com/swift/5.5/async-await)
 - XCTest
@@ -226,6 +231,18 @@ You don't want to have finished everything in your initial MVP.
 - In order to return two different views from a function in SwiftUI, you have to annotate the function with @ViewBuilder
 - Lets us return a specific view but it doesn't matter which type
 - [Adding SwiftUI’s ViewBuilder attribute to functions](https://www.swiftbysundell.com/tips/adding-swiftui-viewbuilder-to-functions/)
+
+### Weak Self?
+- Although we have [Automatic Reference Counting](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html) in place, we still need to manage reference types (class members) to prevent retain cycles (strong reference cycles).
+- By setting weak in front of a class member, we tell the ARC to release the strong reference for it. Thus memory will be freed up.
+- Weak references are always declared as optionals as they can automatically be set to nil by ARC when its reference is deallocated.
+- By adding weak by default you probably end up working with optionals in a lot of cases while it’s actually not needed.
+
+### Async/Await
+- try? (optional try) will return nil in case an error is thrown
+
+## Deprecations
+- [SwiftUI Deprecated Modifiers](https://developer.apple.com/documentation/swiftui/view-deprecated)
 
 ## Code comments
 For learning purposes, I have added lots of comments alongside the code. I am aware that this would probably be omitted at that extent in 'production' code 😉
