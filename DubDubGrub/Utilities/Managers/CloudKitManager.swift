@@ -213,29 +213,20 @@ final class CloudKitManager {
 
      - Returns: A completion handler with the Result containing a dictionary [DDGLocation : Int]
      */
-    func getCheckedInProfilesCount(completed: @escaping (Result<[CKRecord.ID : Int], Error>) -> Void) {
+    func getCheckedInProfilesCount() async throws -> [CKRecord.ID : Int] {
         let predicate = NSPredicate(format: "isCheckedInNilCheck == 1")
         let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
-        // CKQueryOperation: we get back 2 closures:
-        // - first closure feeds us the records as they are being downloaded
-        // - second closure fires of when the query is done
-        let operation = CKQueryOperation(query: query) // by using CKQueryOperation we get only the keys back we actually want
-        operation.desiredKeys = [DDGProfile.kIsCheckedIn] // for the profile count we just need to download the isCheckedIn reference (uuid)
 
-        // Build dictionary (locationId and Int for the count)
         var checkedInProfiles: [CKRecord.ID : Int] = [:]
 
-        // The closure to execute when a record (that has matched the above predicate) becomes available.
-        operation.recordFetchedBlock = { record in
-            // check what the referenceId is (that is the location where that profile is checked-in to)
-            // cast it into the specific type
-            guard let locationReference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
+        let (matchResults, _) = try await container.publicCloudDatabase.records(matching: query, desiredKeys: [DDGProfile.kIsCheckedIn])
+        let records = matchResults.compactMap { _, result in try? result.get()}
 
+        for record in records {
+            guard let locationReference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference else { continue }
             // how many counts are at each location
             if let count = checkedInProfiles[locationReference.recordID] {
-                // if we have a count for the location, we
                 checkedInProfiles[locationReference.recordID] = count + 1
-
             } else {
                 // if the count at a location is nil, go and make the count = 1
                 // because that is the first time we have seen this record when building the dictionary
@@ -243,65 +234,30 @@ final class CloudKitManager {
             }
         }
 
-        // The closure to execute after CloudKit retrieves all of the records.
-        operation.queryCompletionBlock = { cursor, error in
-            guard error == nil else {
-                completed(.failure(error!))
-                return
-            }
-
-            // TODO: handle cursor later on
-            // (cursor for pagination: you pass in the cursor to a next query so that it knows where to start querying the record
-
-            completed(.success(checkedInProfiles))
-        }
-
-        // run the operation
-        CKContainer.default().publicCloudDatabase.add(operation)
+        return checkedInProfiles
     }
 
     /**
-     Save or update an Array of CKRecords
+     Save an Array of CKRecords to the CK database
 
      - Parameter records: The Array of records to save or update
      - Returns: A completion handler with the Result<[CKRecord], Error>. [CKRecord]
+     - Throws an error when saving fails
      */
-    func batchSave(records: [CKRecord], completed: @escaping (Result<[CKRecord], Error>) -> Void) {
-
-        let operation = CKModifyRecordsOperation(recordsToSave: records)
-        // completion block
-        // (if it was successful we get savedRecords back or deletedRecords which we ignore here, otherwise an error)
-        operation.modifyRecordsCompletionBlock = { savedRecords, _, error in
-            guard let savedRecords = savedRecords, error == nil else {
-                Logger.cloudKitManager.error("Saving of userRecord and profileRecord to CloudKit failed: \(error!.localizedDescription)")
-                completed(.failure(error!))
-                return
-            }
-
-            completed(.success(savedRecords))
-            Logger.profileView.info("Saved records to CloudKit: \(savedRecords)")
-        }
-
-        // run the operation (to save the records)
-        CKContainer.default().publicCloudDatabase.add(operation)
+    func batchSave(records: [CKRecord]) async throws -> [CKRecord] {
+        let (savedResults, _) = try await container.publicCloudDatabase.modifyRecords(saving: records, deleting: [])
+        return savedResults.compactMap { _, result in try? result.get()}
     }
 
     /**
-     Save or Update  a single CKRecord - Network call to CloudKit
+     Save a single CKRecord to the CK database - Network call to CloudKit
 
-     - Parameter record: The CKRecord to save/update
-     - Returns: A completion handler with the Result<CKRecord, Error>
+     - Parameter record: The CKRecord to save
+     - Returns: the successfully saved record
+     - Throws an error when saving fails
      */
-    func save(record: CKRecord, completed: @escaping (Result<CKRecord, Error>) -> Void) {
-        CKContainer.default().publicCloudDatabase.save(record) { record, error in
-            guard let record = record, error == nil else {
-                completed(.failure(error!))
-                Logger.profileView.error("Fetching profileRecord failed: \(error!.localizedDescription)")
-                return
-            }
-
-            completed(.success(record))
-        }
+    func save(record: CKRecord) async throws -> CKRecord {
+        return try await container.publicCloudDatabase.save(record)
     }
 
     /**
@@ -309,16 +265,9 @@ final class CloudKitManager {
 
      - Parameter id: The CKRecord.ID to fetch the Record  with
      - Returns: A completion handler with the Result<CKRecord, Error>
+     - Throws: and error when fetching fails
      */
-    func fetchRecord(with id: CKRecord.ID, completed: @escaping (Result<CKRecord, Error>) -> Void) {
-        CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
-            guard let record = record, error == nil else {
-                completed(.failure(error!))
-                Logger.profileView.error("Fetching profileRecord failed: \(error!.localizedDescription)")
-                return
-            }
-
-            completed(.success(record))
-        }
+    func fetchRecord(with id: CKRecord.ID) async throws -> CKRecord {
+        return try await container.publicCloudDatabase.record(for: id)
     }
 }

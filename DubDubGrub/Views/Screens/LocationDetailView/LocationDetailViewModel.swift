@@ -48,23 +48,22 @@ import OSLog
             Logger.locationDetailViewModel.info("getCheckedInStatus: user is not signed-in to iCloud.")
             return
         }
-        CloudKitManager.shared.fetchRecord(with: profileRecordID) { [self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let record):
-                    // does the DDGProfile.kIsCheckedIn (casting it to a Reference) has a reference?
-                    if let reference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference {
-                        isCheckedIn = reference.recordID == location.id
-                        Logger.locationDetailViewModel.info("User is checkedIn to: \(location.name)")
-                    } else {
-                        isCheckedIn = false
-                        Logger.locationDetailViewModel.info("User is checkedOut - reference is nil")
-                    }
-                case .failure(let error):
-                    showAlert = true
-                    alertItem = AlertContext.unableToGetCheckInStatus
-                    Logger.locationDetailViewModel.error("Failed to fetch record: \(error.localizedDescription)")
+
+        Task {
+            do {
+                let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
+                // does the DDGProfile.kIsCheckedIn (casting it to a Reference) has a reference?
+                if let reference = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference {
+                    isCheckedIn = reference.recordID == location.id
+                    Logger.locationDetailViewModel.info("User is checkedIn to: \(self.location.name)")
+                } else {
+                    isCheckedIn = false
+                    Logger.locationDetailViewModel.info("User is checkedOut - reference is nil")
                 }
+            } catch {
+                showAlert = true
+                alertItem = AlertContext.unableToGetCheckInStatus
+                Logger.locationDetailViewModel.error("Failed to fetch record: \(error.localizedDescription)")
             }
         }
     }
@@ -94,9 +93,10 @@ import OSLog
         }
 
         showLoadingView()
-        CloudKitManager.shared.fetchRecord(with: profileRecordID) { [self] result in
-            switch result {
-            case .success(let record):
+
+        Task {
+            do {
+                let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                 // Create a reference to the location
                 switch checkInStatus {
                 case .checkedIn:
@@ -107,39 +107,24 @@ import OSLog
                     record[DDGProfile.kIsCheckedInNilCheck] = nil
                 }
 
-                // Save the updated profile to CloudKit
-                CloudKitManager.shared.save(record: record) { result in
-                    DispatchQueue.main.async {
-                        hideLoadingView()
-                        switch result {
-                        case .success(let record):
-                            HapticManager.playSuccess()
-                            let profile = DDGProfile(record: record)
-                            switch checkInStatus {
-                            case .checkedIn:
-                                checkedInProfiles.append(profile)
-                                Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedIn successfully")
-                            case .checkedOut:
-                                // for any DDGProfile in the Array where its id is equal to the profile.id, remove it
-                                checkedInProfiles.removeAll(where: {$0.id == profile.id})
-                                Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedOut successfully")
-                            }
-
-                            isCheckedIn.toggle()
-
-                        case .failure(_):
-                            showAlert = true
-                            alertItem = AlertContext.updateProfileFailure
-                            Logger.locationDetailViewModel.info("❌ Error saving record")
-                        }
-                    }
+                let savedRecord = try await CloudKitManager.shared.save(record: record)
+                HapticManager.playSuccess()
+                let profile = DDGProfile(record: savedRecord)
+                switch checkInStatus {
+                case .checkedIn:
+                    checkedInProfiles.append(profile)
+                    Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedIn successfully")
+                case .checkedOut:
+                    // for any DDGProfile in the Array where its id is equal to the profile.id, remove it
+                    checkedInProfiles.removeAll(where: {$0.id == profile.id})
+                    Logger.locationDetailViewModel.info("✅ \(profile.firstName) has checkedOut successfully")
                 }
-
-            case .failure(_):
+                isCheckedIn.toggle()
+                hideLoadingView()
+            } catch {
                 hideLoadingView()
                 showAlert = true
                 alertItem = AlertContext.checkInOutFailed
-                Logger.locationDetailViewModel.info("❌ Error fetching record")
             }
         }
     }
