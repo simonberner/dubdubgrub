@@ -14,7 +14,6 @@ struct LocationListView: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     var body: some View {
-        // TODO: add pull and refresh of the Navigation List in the view
         NavigationView {
             List {
                 ForEach(locationManager.locations) { location in
@@ -26,7 +25,8 @@ struct LocationListView: View {
                     }
                 }
             }
-            .task { viewModel.getCheckedInProfilesDictionary() }
+            .task { await viewModel.getCheckedInProfilesDictionary() }
+            .refreshable { await viewModel.getCheckedInProfilesDictionary() }
             .listStyle(.plain)
             .navigationTitle("Grub Spots")
         }

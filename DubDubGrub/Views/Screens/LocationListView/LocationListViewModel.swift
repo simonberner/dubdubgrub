@@ -17,16 +17,14 @@ extension LocationListView {
         @Published var alertItem: AlertItem?
         @Published var showAlert = false
 
-        func getCheckedInProfilesDictionary() {
-
-            Task {
-                do {
-                    checkedInProfiles = try await CloudKitManager.shared.getCheckedInProfilesDictionary()
-                } catch {
-                    showAlert = true
-                    alertItem = AlertContext.unableToGetAllCheckedInProfiles
-                    Logger.locationListViewModel.error("Error getting back dictionary: \(error.localizedDescription)")
-                }
+        func getCheckedInProfilesDictionary() async {
+            do {
+                checkedInProfiles = try await CloudKitManager.shared.getCheckedInProfilesDictionary()
+                Logger.locationListViewModel.info("getCheckedInProfilesDictionary: called/refresh")
+            } catch {
+                showAlert = true
+                alertItem = AlertContext.unableToGetAllCheckedInProfiles
+                Logger.locationListViewModel.error("Error getting back dictionary: \(error.localizedDescription)")
             }
         }
 
