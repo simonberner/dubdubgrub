@@ -12,7 +12,6 @@ import OSLog
 struct ProfileView: View {
 
     @FocusState private var focusedTextField: ProfileTextField?
-    @FocusState private var dismissKeyboard: Bool
 
     @StateObject private var viewModel = ProfileViewModel()
 
@@ -50,7 +49,6 @@ struct ProfileView: View {
                                 .onSubmit { focusedTextField = .bio }
                                 .submitLabel(.next)
                         }
-                        .focused($dismissKeyboard)
                         .padding(.trailing, 16)
 
                         Spacer()
@@ -77,7 +75,7 @@ struct ProfileView: View {
                         }
                     }
 
-                    BioTextEditor(text: $viewModel.bio, focusedTextField: $focusedTextField, dismissKeyboard: $dismissKeyboard)
+                    BioTextEditor(text: $viewModel.bio, focusedTextField: $focusedTextField)
                 }
                 .padding(.horizontal)
 
@@ -95,17 +93,15 @@ struct ProfileView: View {
         }
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(DeviceTypes.isiPhone8Standard ? .inline : .automatic)
+        .ignoresSafeArea(.keyboard)
         .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                HStack {
-                    Spacer()
+            ToolbarItemGroup(placement: .keyboard) {
                     Button {
-                        dismissKeyboard.toggle()
+                        focusedTextField = nil
                     } label: {
                         Image(systemName: "keyboard.chevron.compact.down")
                             .foregroundColor(.brandPrimary)
                     }
-                }
             }
         }
         .task {
@@ -192,14 +188,12 @@ struct BioTextEditor: View {
 
     var text: Binding<String>
     var focusedTextField: FocusState<ProfileView.ProfileTextField?>.Binding
-    var dismissKeyboard: FocusState<Bool>.Binding
 
     var body: some View {
         TextEditor(text: text)
             .frame(height: 100)
             .overlay { RoundedRectangle(cornerRadius: 10).stroke(Color.secondary, lineWidth: 1) }
             .focused(focusedTextField, equals: ProfileView.ProfileTextField.bio)
-            .focused(dismissKeyboard)
             .accessibilityHint(Text("This TextField is for your bio and has a 100 character maximum."))
     }
 }
